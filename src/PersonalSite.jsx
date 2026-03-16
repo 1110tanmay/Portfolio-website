@@ -147,13 +147,13 @@ const styles = `
   .ps-nav-links a:hover::after { width: 100%; }
 
   .ps-hero {
-    min-height: 100vh; display: grid;
+    height: auto; display: grid;
     grid-template-columns: 1fr 1fr;
-    padding-top: 100px; position: relative;
+    padding-top: 80px; position: relative;
   }
   .ps-hero-left {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 80px 60px;
+    padding: 40px 60px;
   }
   .ps-hero-tag {
     font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em;
@@ -187,23 +187,18 @@ const styles = `
     position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
-  .ps-scroll-hint {
-    position: absolute; bottom: 40px; left: 60px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .ps-scroll-hint span {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--gray-500);
-  }
-  .ps-scroll-line {
-    width: 40px; height: 1px; background: var(--gray-300);
-    position: relative; overflow: hidden;
-  }
-  .ps-scroll-line::after {
-    content: ''; position: absolute; top: 0; left: -100%;
-    width: 100%; height: 100%; background: var(--black);
-    animation: scrollLine 2s ease-in-out infinite;
-  }
+  .ps-project-link {
+  display: inline-block;
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-700);
+  text-decoration: none;
+  transition: color 0.2s, gap 0.2s;
+}
+.ps-project-link:hover { color: var(--black); }
 
   .ps-section { padding: 120px 60px; }
   .ps-section-label {
@@ -315,7 +310,6 @@ const styles = `
   .ps-fadein { animation: fadeUp 0.8s forwards; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes scrollLine { 0% { left: -100%; } 50% { left: 0%; } 100% { left: 100%; } }
 
   /* ── CHATBOT ── */
   .chat-fab {
@@ -431,7 +425,6 @@ const styles = `
     .ps-hero { grid-template-columns: 1fr; }
     .ps-hero-right { height: 420px; }
     .ps-hero-left { padding: 100px 28px 60px; }
-    .ps-scroll-hint { left: 28px; }
     .ps-section { padding: 80px 28px; }
     .ps-about-grid { grid-template-columns: 1fr; gap: 48px; }
     .ps-projects-grid { grid-template-columns: 1fr; }
@@ -446,7 +439,7 @@ const styles = `
 const SKILLS = [
   "Java", "Swift", "Python","JavaScript", 
   "ReactJS","NextJS","Node.js","Spring Boot",
-  "AWS","Azure","Docker","Kubernetes", "Kafka", "PostgreSQL","GraphQL", "MongoDB", "SQLlite", "Redis",
+  "AWS","Azure","Docker","Kubernetes", "Kafka", "PostgreSQL","GraphQL", "MongoDB", "SQLite", "Redis",
 ];
 
 const EXPERIENCE = [
@@ -487,14 +480,16 @@ const EDUCATION = [
 
 const PROJECTS = [
   {
-    num: "01", title: "Healthcare Revamp",
-    desc: "A web app diagnosing 3,000+ diseases using 20+ symptoms, age ranges, lifestyle factors, and sex. Analytics dashboard for rural practitioners hosted on Azure.",
-    tags: ["Flutter","Dart","Flask","GraphDB","SPARQL","Azure"],
-  },
-  {
-    num: "02", title: "Smart heat tracker — iOS + watchOS",
+    num: "01", title: "Smart heat tracker — iOS + watchOS",
     desc: "Estimates core body temperature within ±0.2°C using live heart rate and the ECTemp™ algorithm — fully on-device, no cloud, 100% PHI compliant.",
     tags: ["Swift","SwiftUI","HealthKit","WatchConnectivity","SQLite"],
+    link: "https://github.com/1110tanmay/SmartHeat-Tracker",
+  },
+  {
+    num: "02", title: "Healthcare Revamp",
+    desc: "A web app diagnosing 3,000+ diseases using 20+ symptoms, age ranges, lifestyle factors, and sex. Analytics dashboard for rural practitioners hosted on Azure.",
+    tags: ["Flutter","Dart","Flask","GraphDB","SPARQL","Azure"],
+    link: "https://github.com/1110tanmay/Healthcare-Revamp-",
   },
 ];
 
@@ -698,10 +693,7 @@ function Hero() {
         </div>
       </div>
       <div className="ps-hero-right">
-        <img src={photo} alt="Tanmay Shelar" style={{ width: '420px', height: '520px', objectFit: 'cover', borderRadius: '12px' }} />
-      </div>
-      <div className="ps-scroll-hint ps-fadein" style={{ animationDelay: "1.5s", opacity: 0 }}>
-        <span>Scroll</span><div className="ps-scroll-line" />
+        <img src={photo} alt="Tanmay Shelar" style={{ width: '380px', height: '520px', objectFit: 'cover', borderRadius: '12px' }} />
       </div>
     </section>
   );
@@ -798,6 +790,11 @@ function Projects({ revealRef }) {
             <h3 className="ps-project-title">{p.title}</h3>
             <p className="ps-project-desc">{p.desc}</p>
             <div className="ps-project-tags">{p.tags.map(t => <span className="ps-project-tag" key={t}>{t}</span>)}</div>
+            {p.link && (
+  <a href={p.link} target="_blank" rel="noopener noreferrer" className="ps-project-link">
+    View on GitHub →
+  </a>
+)}
           </div>
         ))}
       </div>
