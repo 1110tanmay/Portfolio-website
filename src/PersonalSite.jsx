@@ -498,7 +498,7 @@ const CONTACTS = [
   { platform: "GitHub",   value: "github.com/1110tanmay",         href: "https://github.com/1110tanmay" },
   { platform: "LinkedIn", value: "linkedin.com/in/tanmay-shelar", href: "https://linkedin.com/in/tanmay-shelar/" },
   { platform: "Phone",    value: "602-796-9188",                  href: "tel:6027969188" },
-  { platform: "Resume",    value: "Resume",                  href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=sharing" },
+  { platform: "Resume",    value: "Latest Resume",                  href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=sharing" },
 ];
 
 const SUGGESTIONS = [
@@ -581,7 +581,7 @@ function Chatbot() {
           ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         }
-        {!open && <span className="chat-fab-label">Ask me anything</span>}
+        {!open && <span className="chat-fab-label">Tanmay's AI agent</span>}
       </button>
 
       {/* Window */}
