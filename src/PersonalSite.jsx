@@ -167,8 +167,8 @@ const styles = `
   }
   .app-container-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 50% 50%, #1a1b1f, #0a0b0d);
-    background-color: #0a0b0d; z-index: 0;
+    background: radial-gradient(circle at 50% 50%, #1a1e2b, #0a0c14);
+    background-color: #0a0c14; z-index: 0;
   }
   .ps-hero-left {
     display: flex; flex-direction: column; justify-content: center;
@@ -949,19 +949,20 @@ const cloudOptions = {
   initial: [0.1, -0.1],
   outlineMethod: "none",
   reverse: true,
-  maxSpeed: 0.02,
-  minSpeed: 0.01,
+  maxSpeed: 0.01,
+  minSpeed: 0.005,
   wheelZoom: false,
   textFont: "var(--mono)",
   textColour: "#E4C58F",
-  textHeight: 40,
+  textHeight: 20,
 };
 
 function SkillsCloud() {
   const extraSkills = [
     "npm", "Data Structures and Algorithms", "System Design",
     "Object-Oriented Programming", "Postman", "Xcode", "VS Code",
-    "Jira", "Confluence", "Notion", "Tensorflow", "DataDog", "Retool"
+    "Jira", "Confluence", "Notion", "Tensorflow", "DataDog", "Retool", "Scrum", "Agile", "Git",
+    "Cursor", "Antigravity", "API", "REST APIs", "HTML", "CSS", "npm", "Bash", "CI/CD", "Gradle"
   ];
   const allCloudSkills = [...SKILLS, ...extraSkills];
 
