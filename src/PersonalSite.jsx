@@ -1,5 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Cloud } from 'react-icon-cloud';
 import photo from './assets/ProfessionalPicture2.png';
+import heroBgVideo from './assets/hero-bg.mp4';
+
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
 
@@ -126,66 +129,83 @@ const styles = `
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
     padding: 28px 60px;
-    background: rgba(248,247,244,0.85);
-    backdrop-filter: blur(8px);
+    background: transparent;
+    transition: background 0.3s, backdrop-filter 0.3s, padding 0.3s;
+  }
+  .ps-nav.scrolled {
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px 60px;
   }
   .ps-nav-logo {
     font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em;
-    color: var(--black); text-decoration: none;
+    color: var(--white); text-decoration: none;
   }
   .ps-nav-links { display: flex; gap: 40px; list-style: none; }
   .ps-nav-links a {
     font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--gray-700); text-decoration: none;
+    text-transform: uppercase; color: var(--gray-300); text-decoration: none;
     position: relative; transition: color 0.2s;
   }
   .ps-nav-links a::after {
     content: ''; position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 1px; background: var(--black); transition: width 0.3s;
+    width: 0; height: 1px; background: var(--white); transition: width 0.3s;
   }
-  .ps-nav-links a:hover { color: var(--black); }
+  .ps-nav-links a:hover { color: var(--white); }
   .ps-nav-links a:hover::after { width: 100%; }
 
   .ps-hero {
     height: auto; display: grid;
     grid-template-columns: 1fr 1fr;
     padding-top: 80px; position: relative;
+    min-height: 100vh; overflow: hidden;
+  }
+  .background-flow-canvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: auto; background: transparent;
+  }
+  .app-container-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 50%, #1a1b1f, #0a0b0d);
+    background-color: #0a0b0d; z-index: 0;
   }
   .ps-hero-left {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 40px 60px;
+    padding: 40px 60px; position: relative; z-index: 1;
   }
   .ps-hero-tag {
     font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--gray-500); margin-bottom: 32px;
+    text-transform: uppercase; color: var(--gray-300); margin-bottom: 32px;
   }
   .ps-h1 {
     font-family: var(--serif); font-size: clamp(52px, 6vw, 88px);
-    line-height: 1.02; letter-spacing: -0.02em; color: var(--black); margin-bottom: 32px;
+    line-height: 1.02; letter-spacing: -0.02em; color: var(--white); margin-bottom: 32px;
   }
-  .ps-h1 em { font-style: italic; color: var(--gray-500); }
+  .ps-h1 em { font-style: italic; color: var(--gray-300); }
   .ps-hero-desc {
-    font-size: 17px; line-height: 1.8; color: var(--gray-700);
+    font-size: 17px; line-height: 1.8; color: var(--gray-100);
     max-width: 420px; margin-bottom: 52px;
   }
   .ps-hero-ctas { display: flex; gap: 16px; align-items: center; }
   .ps-btn-primary {
-    display: inline-block; padding: 14px 32px; background: var(--black);
-    color: var(--white); font-family: var(--mono); font-size: 12px;
+    display: inline-block; padding: 14px 32px; background: var(--white);
+    color: var(--black); font-family: var(--mono); font-size: 12px;
     letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
     border: none; transition: background 0.2s, transform 0.2s; cursor: none;
   }
-  .ps-btn-primary:hover { background: var(--gray-700); transform: translateY(-1px); }
+  .ps-btn-primary:hover { background: var(--gray-300); transform: translateY(-1px); }
   .ps-btn-ghost {
-    display: inline-block; padding: 14px 32px; border: 1px solid var(--black);
-    color: var(--black); font-family: var(--mono); font-size: 12px;
+    display: inline-block; padding: 14px 32px; border: 1px solid var(--white);
+    color: var(--white); font-family: var(--mono); font-size: 12px;
     letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
     transition: background 0.2s, color 0.2s, transform 0.2s; cursor: none;
   }
-  .ps-btn-ghost:hover { background: var(--black); color: var(--white); transform: translateY(-1px); }
+  .ps-btn-ghost:hover { background: var(--white); color: var(--black); transform: translateY(-1px); }
   .ps-hero-right {
     position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
+    z-index: 1;
   }
   .ps-project-link {
   display: inline-block;
@@ -310,6 +330,16 @@ const styles = `
   .ps-fadein { animation: fadeUp 0.8s forwards; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .typewriter-cursor {
+    display: inline-block;
+    opacity: 1;
+    animation: blink 1.2s step-end infinite;
+    font-weight: 300;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .ps-hero .typewriter-cursor { color: var(--white); }
+  .ps-exp-section .typewriter-cursor { color: var(--white); }
 
   /* ── CHATBOT ── */
   .chat-fab {
@@ -437,9 +467,9 @@ const styles = `
 
 // ── Data ──
 const SKILLS = [
-  "Java", "Swift", "Python","JavaScript", 
-  "ReactJS","NextJS","Node.js","Spring Boot",
-  "AWS","Azure","Docker","Kubernetes", "Kafka", "PostgreSQL","GraphQL", "MongoDB", "SQLite", "Redis",
+  "Java", "Swift", "Python", "JavaScript",
+  "ReactJS", "NextJS", "Node.js", "Spring Boot",
+  "AWS", "Azure", "Docker", "Kubernetes", "Kafka", "PostgreSQL", "GraphQL", "MongoDB", "SQLite", "Redis",
 ];
 
 const EXPERIENCE = [
@@ -482,23 +512,23 @@ const PROJECTS = [
   {
     num: "01", title: "Smart heat tracker — iOS + watchOS",
     desc: "Estimates core body temperature within ±0.2°C using live heart rate and the ECTemp™ algorithm — fully on-device, no cloud, 100% PHI compliant.",
-    tags: ["Swift","SwiftUI","HealthKit","WatchConnectivity","SQLite"],
+    tags: ["Swift", "SwiftUI", "HealthKit", "WatchConnectivity", "SQLite"],
     link: "https://github.com/1110tanmay/SmartHeat-Tracker",
   },
   {
     num: "02", title: "Healthcare Revamp",
     desc: "A web app diagnosing 3,000+ diseases using 20+ symptoms, age ranges, lifestyle factors, and sex. Analytics dashboard for rural practitioners hosted on Azure.",
-    tags: ["Flutter","Dart","Flask","GraphDB","SPARQL","Azure"],
+    tags: ["Flutter", "Dart", "Flask", "GraphDB", "SPARQL", "Azure"],
     link: "https://github.com/1110tanmay/Healthcare-Revamp-",
   },
 ];
 
 const CONTACTS = [
-  { platform: "Email",    value: "tshelar@asu.edu",               href: "mailto:tshelar@asu.edu" },
-  { platform: "GitHub",   value: "github.com/1110tanmay",         href: "https://github.com/1110tanmay" },
+  { platform: "Email", value: "tshelar@asu.edu", href: "mailto:tshelar@asu.edu" },
+  { platform: "GitHub", value: "github.com/1110tanmay", href: "https://github.com/1110tanmay" },
   { platform: "LinkedIn", value: "linkedin.com/in/tanmay-shelar", href: "https://linkedin.com/in/tanmay-shelar/" },
-  { platform: "Phone",    value: "602-796-9188",                  href: "tel:6027969188" },
-  { platform: "Resume",    value: "Latest Resume",                  href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=sharing" },
+  { platform: "Phone", value: "602-796-9188", href: "tel:6027969188" },
+  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=sharing" },
 ];
 
 const SUGGESTIONS = [
@@ -519,6 +549,57 @@ function useReveal() {
     return () => obs.disconnect();
   }, []);
   return el => { if (el && !refs.current.includes(el)) refs.current.push(el); };
+}
+
+// ── Typewriter ──
+function Typewriter({ segments, speed = 40, delay = 50 }) {
+  const [visibleChars, setVisibleChars] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef();
+
+  const totalChars = segments.reduce((sum, seg) => sum + (typeof seg === 'string' ? seg.length : 0), 0);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setStarted(true); obs.disconnect(); }
+    }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
+    let chars = 0;
+    const t1 = setTimeout(() => {
+      const t2 = setInterval(() => {
+        chars++;
+        setVisibleChars(chars);
+        if (chars >= totalChars) clearInterval(t2);
+      }, speed);
+      return () => clearInterval(t2);
+    }, delay);
+    return () => clearTimeout(t1);
+  }, [started, totalChars, speed, delay]);
+
+  let charsRendered = 0;
+  return (
+    <span ref={ref} style={{ display: 'inline' }}>
+      {segments.map((seg, idx) => {
+        if (typeof seg === 'string') {
+          const start = charsRendered;
+          charsRendered += seg.length;
+          const end = charsRendered;
+          if (visibleChars <= start) return null;
+          if (visibleChars >= end) return <span key={idx}>{seg}</span>;
+          return <span key={idx}>{seg.substring(0, visibleChars - start)}</span>;
+        } else {
+          if (visibleChars >= charsRendered) return <React.Fragment key={idx}>{seg}</React.Fragment>;
+          return null;
+        }
+      })}
+      <span className="typewriter-cursor">|</span>
+    </span>
+  );
 }
 
 // ── Chatbot ──
@@ -578,8 +659,8 @@ function Chatbot() {
       {/* FAB */}
       <button className="chat-fab" onClick={() => setOpen(o => !o)} title="Chat with Tamy">
         {open
-          ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+          : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
         }
         {!open && <span className="chat-fab-label">Tanmay's AI agent</span>}
       </button>
@@ -612,7 +693,7 @@ function Chatbot() {
           {loading && (
             <div className="chat-msg assistant">
               <span className="chat-sender">Tamy</span>
-              <div className="chat-typing"><span/><span/><span/></div>
+              <div className="chat-typing"><span /><span /><span /></div>
             </div>
           )}
           <div ref={bottomRef} />
@@ -638,7 +719,7 @@ function Chatbot() {
             disabled={loading}
           />
           <button className="chat-send" onClick={() => send()} disabled={loading || !input.trim()}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
           </button>
         </div>
       </div>
@@ -653,7 +734,7 @@ function Cursor() {
   useEffect(() => {
     const move = e => setPos({ x: e.clientX, y: e.clientY });
     const over = e => { if (e.target.closest("a, button")) setExpanded(true); };
-    const out  = e => { if (e.target.closest("a, button")) setExpanded(false); };
+    const out = e => { if (e.target.closest("a, button")) setExpanded(false); };
     document.addEventListener("mousemove", move);
     document.addEventListener("mouseover", over);
     document.addEventListener("mouseout", out);
@@ -664,8 +745,18 @@ function Cursor() {
 
 // ── Nav ──
 function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="ps-nav">
+    <nav className={`ps-nav ${scrolled ? "scrolled" : ""}`}>
       <a className="ps-nav-logo" href="#">TS</a>
       <ul className="ps-nav-links">
         <li><a href="#about">About</a></li>
@@ -682,9 +773,12 @@ function Nav() {
 function Hero() {
   return (
     <section className="ps-hero" id="hero">
+      <SkillsCloud />
       <div className="ps-hero-left">
         <p className="ps-hero-tag ps-fadein" style={{ animationDelay: "0.4s", opacity: 0 }}>Software Engineer · Tempe, Arizona</p>
-        <h1 className="ps-h1 ps-fadein" style={{ animationDelay: "0.7s", opacity: 0 }}>Building things <em>that matter.</em></h1>
+        <h1 className="ps-h1 ps-fadein" style={{ animationDelay: "0.7s", opacity: 0 }}>
+          <Typewriter delay={700} segments={["Building things ", <em>that matter.</em>]} />
+        </h1>
         <p className="ps-hero-desc ps-fadein" style={{ animationDelay: "0.95s", opacity: 0 }}>
           I'm Tanmay Shelar — a graduate student in Software Engineering at ASU with 3+ years of industry experience in full-stack development, cloud platforms, and mobile ecosystems. Seeking full-time roles starting January 2027.
         </p>
@@ -694,7 +788,7 @@ function Hero() {
         </div>
       </div>
       <div className="ps-hero-right">
-        <img src={photo} alt="Tanmay Shelar" style={{ width: '380px', height: '520px', objectFit: 'cover', borderRadius: '12px' }} />
+        <img src={photo} alt="Tanmay Shelar" style={{ width: '380px', height: '520px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }} />
       </div>
     </section>
   );
@@ -705,20 +799,22 @@ function About({ revealRef }) {
   return (
     <section className="ps-section" id="about">
       <p className="ps-section-label ps-reveal" ref={revealRef}>About</p>
-      <h2 className="ps-section-title ps-reveal" ref={revealRef}>Crafting software<br />with intention.</h2>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={300} segments={["Crafting software", <br />, "with intention."]} />
+      </h2>
       <div className="ps-about-grid">
         <div className="ps-about-text ps-reveal" ref={revealRef}>
           <p>I'm a Software Engineering graduate student at Arizona State University with hands-on experience building iOS + watchOS applications, privacy-first health-tech systems, and scalable full-stack tools used in production.</p>
           <p>My work spans startups and research labs — from automating $100K+ in revenue at Zocdoc to building on-device health pipelines that are 100% PHI compliant and cloud-free.</p>
           <p>When I'm not coding, you'll find me exploring new technologies, hiking trails around Tempe, or obsessing over the perfect pour-over.</p>
-          <p>Outside my work life, I love playing Tennis, chess and badminton. I also am a big-time hiker and love going outdoors.</p>
+          <p>Outside my work life, I love playing Tennis, Chess and Badminton. I also am a big-time hiker and love going outdoors.</p>
         </div>
         <div className="ps-reveal" ref={revealRef}>
           <div className="ps-skills-grid">
             {SKILLS.map(s => (<div className="ps-skill-item" key={s}><span className="ps-skill-dot" /><span className="ps-skill-name">{s}</span></div>))}
           </div>
           <div className="ps-stats-row">
-            {[["3+","Years exp."],["3.89","MS GPA"],["Dec '26","Available"]].map(([n, l]) => (
+            {[["3+", "Years exp."], ["3.89", "MS GPA"], ["Dec '26", "Available"]].map(([n, l]) => (
               <div className="ps-stat" key={l}><div className="ps-stat-num">{n}</div><div className="ps-stat-label">{l}</div></div>
             ))}
           </div>
@@ -733,7 +829,9 @@ function Experience({ revealRef }) {
   return (
     <section className="ps-section ps-exp-section" id="experience">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Experience</p>
-      <h2 className="ps-section-title ps-reveal" ref={revealRef}>Where I've<br />worked.</h2>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={300} segments={["Where I've", <br />, "worked."]} />
+      </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EXPERIENCE.map((e, i) => (
           <div className="ps-timeline-item" key={i}>
@@ -758,7 +856,9 @@ function Education({ revealRef }) {
   return (
     <section className="ps-section" id="education">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Education</p>
-      <h2 className="ps-section-title ps-reveal" ref={revealRef}>Where I've<br />studied.</h2>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={300} segments={["Where I've", <br />, "studied."]} />
+      </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EDUCATION.map((e, i) => (
           <div className="ps-timeline-item" key={i}>
@@ -783,7 +883,9 @@ function Projects({ revealRef }) {
   return (
     <section className="ps-section ps-projects-section" id="projects">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Selected Work</p>
-      <h2 className="ps-section-title ps-reveal" ref={revealRef}>Projects I'm<br />proud of.</h2>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={300} segments={["Projects I'm", <br />, "proud of."]} />
+      </h2>
       <div className="ps-projects-grid ps-reveal" ref={revealRef}>
         {PROJECTS.map(p => (
           <div className="ps-project-card" key={p.num}>
@@ -792,10 +894,10 @@ function Projects({ revealRef }) {
             <p className="ps-project-desc">{p.desc}</p>
             <div className="ps-project-tags">{p.tags.map(t => <span className="ps-project-tag" key={t}>{t}</span>)}</div>
             {p.link && (
-  <a href={p.link} target="_blank" rel="noopener noreferrer" className="ps-project-link">
-    View on GitHub →
-  </a>
-)}
+              <a href={p.link} target="_blank" rel="noopener noreferrer" className="ps-project-link">
+                View on GitHub →
+              </a>
+            )}
           </div>
         ))}
       </div>
@@ -808,7 +910,9 @@ function Contact({ revealRef }) {
   return (
     <section className="ps-section" id="contact">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Contact</p>
-      <h2 className="ps-section-title ps-reveal" ref={revealRef}>Let's build<br />something together.</h2>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={300} segments={["Let's build", <br />, "something together."]} />
+      </h2>
       <div className="ps-contact-inner ps-reveal" ref={revealRef}>
         <p className="ps-contact-desc">Open to full-time Software Engineering roles starting January 2027. If you're working on something interesting, I'd love to hear about it.</p>
         <div>
@@ -834,6 +938,57 @@ function Footer() {
       <span>© 2026 Tanmay Shelar</span>
       <span>Designed &amp; built with care</span>
     </footer>
+  );
+}
+
+// ── Skills Cloud ──
+const cloudOptions = {
+  clickToFront: 500,
+  depth: 1,
+  imageScale: 2,
+  initial: [0.1, -0.1],
+  outlineMethod: "none",
+  reverse: true,
+  maxSpeed: 0.02,
+  minSpeed: 0.01,
+  wheelZoom: false,
+  textFont: "var(--mono)",
+  textColour: "#E4C58F",
+  textHeight: 40,
+};
+
+function SkillsCloud() {
+  const extraSkills = [
+    "npm", "Data Structures and Algorithms", "System Design",
+    "Object-Oriented Programming", "Postman", "Xcode", "VS Code",
+    "Jira", "Confluence", "Notion", "Tensorflow", "DataDog", "Retool"
+  ];
+  const allCloudSkills = [...SKILLS, ...extraSkills];
+
+  const content = allCloudSkills.map(skill => (
+    <a key={skill} href="#" onClick={(e) => e.preventDefault()} style={{ cursor: 'default' }}>
+      {skill}
+    </a>
+  ));
+
+  return (
+    <>
+      <div className="app-container-bg" />
+      <div className="background-flow-canvas">
+        <Cloud
+          id="skills-cloud"
+          options={cloudOptions}
+          containerProps={{
+            style: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }
+          }}
+          canvasProps={{
+            style: { width: '100%', height: '100%', opacity: 0.8 }
+          }}
+        >
+          {content}
+        </Cloud>
+      </div>
+    </>
   );
 }
 
