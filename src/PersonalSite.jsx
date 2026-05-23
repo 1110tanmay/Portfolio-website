@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Cloud } from 'react-icon-cloud';
 import photo from './assets/ProfessionalPicture2.png';
-import heroBgVideo from './assets/hero-bg.mp4';
+import clinavis1 from './assets/clinavis/clinavis-1.png';
+import clinavis2 from './assets/clinavis/clinavis-2.png';
+import clinavis3 from './assets/clinavis/clinavis-3.png';
+import clinavis4 from './assets/clinavis/clinavis-4.png';
+import clinavis5 from './assets/clinavis/clinavis-5.png';
 
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
@@ -20,7 +24,7 @@ ABOUT TANMAY SHELAR:
 
 IDENTITY:
 - Graduate student in Software Engineering at Arizona State University, Tempe, Arizona
-- GPA: 3.89 (MS), 3.01 (BE)
+- GPA: 3.96 (MS), 3.01 (BE)
 - Available for full-time roles starting January 2027
 - Email: 1110tanmay@gmail.com | Phone: 602-796-9188
 - GitHub: github.com/1110tanmay | LinkedIn: linkedin.com/in/tanmay-shelar
@@ -49,7 +53,7 @@ ESCAFATE (Internship):
 - Reduced onboarding time by 10 days, post-launch issues by 85%
 
 EDUCATION:
-- MS Computer Software Engineering, ASU, Aug 2024 – December 2026, GPA 3.89
+- MS Computer Software Engineering, ASU, Aug 2024 – December 2026, GPA 3.96
 - BE Electronics & Telecommunications, Pune University, Aug 2017 – May 2021, GPA 3.01
 
 SKILLS:
@@ -61,6 +65,11 @@ SKILLS:
 PROJECTS:
 1. Healthcare Revamp — Flutter/Dart frontend, Flask backend, GraphDB via SPARQL. Diagnoses 3,000+ diseases using 20+ symptoms. Analytics dashboard for rural practitioners. Hosted on Azure.
 2. Smart heat tracker iOS + watchOS App — described above.
+
+CURRENT FOCUS — Clinavis:
+- EHR intelligence platform: RAG, role-aware prompting, self-critique loops; summaries tailored per reader (physician / nurse / patient).
+- Stack: FastAPI, React, Supabase + pgvector, Anthropic Claude API; HIPAA-minded, privacy-first.
+- Motivation: personal hospital stay — gap between clinical charts and patient understanding.
 
 IDEAL ROLE (January 2027):
 - Software engineering, AI engineering, or data engineering
@@ -82,31 +91,42 @@ FUN FACTS:
 Remember: you are Jarvis. Be helpful, be brilliant, be slightly smug — but always in service of helping recruiters understand why Tanmay Shelar is exactly who they're looking for.`;
 
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --black: #0a0a0a;
-    --white: #f8f7f4;
-    --gray-100: #f0ede8;
-    --gray-300: #c8c4bc;
-    --gray-500: #8a867e;
-    --gray-700: #4a4740;
-    --serif: 'DM Serif Display', Georgia, serif;
-    --mono: 'DM Mono', 'Courier New', monospace;
-    --sans: 'DM Sans', sans-serif;
+    --black: #000000;
+    --near-black: #202124;
+    --white: #ffffff;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f4;
+    --gray-200: #e8eaed;
+    --gray-300: #dadce0;
+    --gray-500: #80868b;
+    --gray-700: #5f6368;
+    /* Spectrum accents — original palette (not Google brand colors) */
+    --spectrum-indigo: #6366f1;
+    --spectrum-rose: #e11d48;
+    --spectrum-amber: #d97706;
+    --spectrum-teal: #0d9488;
+    --spectrum-violet: #7c3aed;
+    --accent-action: #4f46e5;
+    --mono: 'DM Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --radius-pill: 9999px;
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     background: var(--white);
-    color: var(--black);
+    color: var(--near-black);
     font-family: var(--sans);
-    font-weight: 300;
+    font-weight: 400;
     overflow-x: hidden;
     cursor: none;
+    -webkit-font-smoothing: antialiased;
   }
 
   .ps-cursor {
@@ -128,38 +148,68 @@ const styles = `
   .ps-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 28px 60px;
-    background: transparent;
-    transition: background 0.3s, backdrop-filter 0.3s, padding 0.3s;
+    padding: 24px 56px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, padding 0.3s;
   }
   .ps-nav.scrolled {
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 20px 60px;
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom-color: var(--gray-100);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+    padding: 18px 56px;
   }
   .ps-nav-logo {
-    font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em;
-    color: var(--white); text-decoration: none;
+    font-family: var(--sans); font-size: 15px; font-weight: 600; letter-spacing: -0.02em;
+    text-decoration: none;
+    display: inline-flex; align-items: center;
   }
-  .ps-nav-links { display: flex; gap: 40px; list-style: none; }
+  .ps-nav-logo-mark {
+    font-family: 'Monsieur La Doulaise', cursive;
+    font-size: 36px;
+    font-weight: 400;
+    padding-right: 4px;
+    color: var(--black);
+  }
+  .ps-nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
   .ps-nav-links a {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--gray-300); text-decoration: none;
+    font-family: var(--sans); font-size: 14px; font-weight: 400;
+    letter-spacing: 0; color: var(--gray-700); text-decoration: none;
     position: relative; transition: color 0.2s;
   }
   .ps-nav-links a::after {
-    content: ''; position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 1px; background: var(--white); transition: width 0.3s;
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 2px; background: var(--black); transition: width 0.25s; border-radius: 2px;
   }
-  .ps-nav-links a:hover { color: var(--white); }
+  .ps-nav-links a:hover { color: var(--black); }
   .ps-nav-links a:hover::after { width: 100%; }
 
   .ps-hero {
     height: auto; display: grid;
     grid-template-columns: 1fr 1fr;
-    padding-top: 80px; position: relative;
+    padding-top: 96px; position: relative;
     min-height: 100vh; overflow: hidden;
+    background: var(--white);
+  }
+  .ps-hero::before {
+    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 85% 70% at 88% 42%, rgba(99, 102, 241, 0.11) 0%, transparent 55%),
+      radial-gradient(circle at 18% 72%, rgba(13, 148, 136, 0.09) 0%, transparent 46%),
+      radial-gradient(ellipse 55% 45% at 72% 88%, rgba(217, 119, 6, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 12% 28%, rgba(225, 29, 72, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% -10%, rgba(124, 58, 237, 0.05) 0%, transparent 42%);
+  }
+  .ps-hero-dot-field {
+    position: absolute; top: 0; right: 0; width: min(58%, 720px); height: 100%;
+    z-index: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(95, 99, 104, 0.22) 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+    mask-image: radial-gradient(ellipse 75% 65% at 72% 48%, #000 18%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 72% 48%, #000 18%, transparent 72%);
+    opacity: 0.85;
   }
   .background-flow-canvas {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -167,45 +217,57 @@ const styles = `
   }
   .app-container-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 50% 50%, #1a1e2b, #0a0c14);
-    background-color: #0a0c14; z-index: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+    z-index: 0;
   }
   .ps-hero-left {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 40px 60px; position: relative; z-index: 1;
+    padding: 48px 56px 80px; position: relative; z-index: 2;
   }
   .ps-hero-tag {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--gray-300); margin-bottom: 32px;
+    font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+    color: var(--gray-700); margin-bottom: 28px;
   }
   .ps-h1 {
-    font-family: var(--serif); font-size: clamp(52px, 6vw, 88px);
-    line-height: 1.02; letter-spacing: -0.02em; color: var(--white); margin-bottom: 32px;
+    font-family: var(--sans); font-size: clamp(40px, 5.2vw, 72px); font-weight: 600;
+    line-height: 1.05; letter-spacing: -0.035em; color: var(--black); margin-bottom: 28px;
   }
-  .ps-h1 em { font-style: italic; color: var(--gray-300); }
+  .ps-h1 em { font-style: normal; font-weight: 600; color: var(--gray-700); }
   .ps-hero-desc {
-    font-size: 17px; line-height: 1.8; color: var(--gray-100);
-    max-width: 420px; margin-bottom: 52px;
+    font-size: 17px; line-height: 1.65; color: var(--gray-700);
+    max-width: 460px; margin-bottom: 40px;
   }
-  .ps-hero-ctas { display: flex; gap: 16px; align-items: center; }
+  .ps-hero-ctas { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
   .ps-btn-primary {
-    display: inline-block; padding: 14px 32px; background: var(--white);
-    color: var(--black); font-family: var(--mono); font-size: 12px;
-    letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-    border: none; transition: background 0.2s, transform 0.2s; cursor: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 28px; min-height: 48px;
+    background: var(--black); color: var(--white); font-family: var(--sans); font-size: 14px; font-weight: 500;
+    letter-spacing: 0; text-decoration: none;
+    border: none; border-radius: var(--radius-pill);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s; cursor: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
-  .ps-btn-primary:hover { background: var(--gray-300); transform: translateY(-1px); }
+  .ps-btn-primary:hover { background: var(--near-black); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
   .ps-btn-ghost {
-    display: inline-block; padding: 14px 32px; border: 1px solid var(--white);
-    color: var(--white); font-family: var(--mono); font-size: 12px;
-    letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-    transition: background 0.2s, color 0.2s, transform 0.2s; cursor: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 28px; min-height: 48px;
+    border: 1px solid var(--gray-300); background: var(--white);
+    color: var(--black); font-family: var(--sans); font-size: 14px; font-weight: 500;
+    letter-spacing: 0; text-decoration: none;
+    border-radius: var(--radius-pill);
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s; cursor: none;
   }
-  .ps-btn-ghost:hover { background: var(--white); color: var(--black); transform: translateY(-1px); }
+  .ps-btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-300); transform: translateY(-1px); }
   .ps-hero-right {
-    position: relative; overflow: hidden;
+    position: relative; overflow: visible;
     display: flex; align-items: center; justify-content: center;
-    z-index: 1;
+    z-index: 2;
+  }
+  .ps-hero-photo {
+    width: min(380px, 92%); height: auto; max-height: 520px; aspect-ratio: 380 / 520;
+    object-fit: cover;
+    border-radius: 28px;
+    box-shadow: 0 24px 64px rgba(32, 33, 36, 0.12), 0 2px 8px rgba(32, 33, 36, 0.06);
   }
   .ps-project-link {
   display: inline-block;
@@ -222,7 +284,7 @@ const styles = `
 
   .ps-section { padding: 120px 60px; }
   .ps-section-label {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+    font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
     text-transform: uppercase; color: var(--gray-500); margin-bottom: 16px;
     display: flex; align-items: center; gap: 16px;
   }
@@ -230,8 +292,8 @@ const styles = `
     content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--gray-300);
   }
   .ps-section-title {
-    font-family: var(--serif); font-size: clamp(36px, 4vw, 56px);
-    line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 64px;
+    font-family: var(--sans); font-size: clamp(34px, 3.8vw, 52px); font-weight: 600;
+    line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 56px; color: var(--near-black);
   }
 
   .ps-about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
@@ -241,14 +303,140 @@ const styles = `
     padding: 20px 0; border-bottom: 1px solid var(--gray-100);
     display: flex; align-items: center; gap: 12px;
   }
-  .ps-skill-dot { width: 5px; height: 5px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
+  .ps-skill-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--spectrum-indigo), var(--spectrum-teal));
+  }
   .ps-skill-name { font-family: var(--mono); font-size: 13px; color: var(--gray-700); }
   .ps-stats-row { display: flex; gap: 0; margin-top: 56px; border-top: 1px solid var(--gray-100); }
   .ps-stat { flex: 1; padding: 32px 0; border-right: 1px solid var(--gray-100); }
   .ps-stat:last-child { border-right: none; padding-left: 32px; }
   .ps-stat:not(:first-child) { padding-left: 32px; }
-  .ps-stat-num { font-family: var(--serif); font-size: 42px; line-height: 1; margin-bottom: 8px; }
+  .ps-stat-num { font-family: var(--sans); font-size: 40px; font-weight: 600; line-height: 1; margin-bottom: 8px; letter-spacing: -0.03em; color: var(--near-black); }
   .ps-stat-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-500); }
+
+  .ps-current-section {
+    background: var(--white);
+    position: relative;
+  }
+  .ps-current-section::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(99, 102, 241, 0.35) 20%,
+      rgba(225, 29, 72, 0.3) 45%,
+      rgba(217, 119, 6, 0.35) 72%,
+      rgba(13, 148, 136, 0.35) 100%);
+    opacity: 0.6;
+  }
+  .ps-current-feature {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .ps-current-glow {
+    position: absolute;
+    inset: -48px -24px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 40px;
+    background:
+      radial-gradient(ellipse 55% 45% at 25% 45%, rgba(99, 102, 241, 0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 42% at 78% 35%, rgba(225, 29, 72, 0.16) 0%, transparent 52%),
+      radial-gradient(ellipse 45% 40% at 85% 75%, rgba(13, 148, 136, 0.18) 0%, transparent 52%),
+      radial-gradient(ellipse 40% 38% at 15% 80%, rgba(217, 119, 6, 0.17) 0%, transparent 48%),
+      radial-gradient(ellipse 35% 30% at 55% 95%, rgba(124, 58, 237, 0.12) 0%, transparent 45%);
+    filter: blur(32px);
+    opacity: 0.95;
+  }
+  .ps-current-card {
+    position: relative;
+    z-index: 1;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 28px;
+    padding: 44px 40px 48px;
+    box-shadow:
+      0 2px 8px rgba(32, 33, 36, 0.04),
+      0 24px 56px rgba(32, 33, 36, 0.07),
+      0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .ps-current-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .ps-current-slider {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--gray-200);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+  .ps-current-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+    transform: scale(1.02);
+  }
+  .ps-current-slide.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .ps-current-kicker {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: linear-gradient(90deg, var(--spectrum-indigo), var(--spectrum-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 12px;
+  }
+  .ps-current-project-title {
+    font-family: var(--sans); font-size: clamp(22px, 2.5vw, 28px);
+    font-weight: 600; letter-spacing: -0.03em; color: var(--near-black);
+    line-height: 1.25; margin-bottom: 16px;
+  }
+  .ps-current-tagline {
+    font-size: 17px; line-height: 1.65; color: var(--gray-700);
+    font-weight: 500; margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .ps-current-body p {
+    font-size: 16px; line-height: 1.75; color: var(--gray-700);
+    margin-bottom: 18px;
+  }
+  .ps-current-body p:last-child { margin-bottom: 0; }
+  .ps-current-note {
+    margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--gray-200);
+    font-size: 15px; line-height: 1.7; color: var(--gray-700);
+    font-style: italic;
+  }
+  .ps-current-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px;
+  }
+  .ps-current-tag {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    padding: 8px 14px; border-radius: var(--radius-pill);
+    border: 1px solid var(--gray-300);
+    color: var(--gray-700); background: var(--white);
+  }
+  .ps-current-tag:nth-child(5n+1) { border-color: rgba(99, 102, 241, 0.35); color: #4338ca; }
+  .ps-current-tag:nth-child(5n+2) { border-color: rgba(225, 29, 72, 0.3); color: #be123c; }
+  .ps-current-tag:nth-child(5n+3) { border-color: rgba(217, 119, 6, 0.35); color: #b45309; }
+  .ps-current-tag:nth-child(5n+4) { border-color: rgba(13, 148, 136, 0.35); color: #0f766e; }
+  .ps-current-tag:nth-child(5n+5) { border-color: rgba(124, 58, 237, 0.3); color: #6d28d9; }
 
   .ps-timeline { display: flex; flex-direction: column; gap: 0; }
   .ps-timeline-item {
@@ -258,31 +446,32 @@ const styles = `
   .ps-timeline-item:first-child { border-top: 1px solid var(--gray-100); }
   .ps-timeline-period { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 8px; text-transform: uppercase; }
   .ps-timeline-location { font-family: var(--mono); font-size: 11px; color: var(--gray-300); line-height: 1.6; }
-  .ps-timeline-role { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--black); margin-bottom: 4px; }
+  .ps-timeline-role { font-family: var(--sans); font-size: 20px; font-weight: 600; color: var(--near-black); margin-bottom: 4px; letter-spacing: -0.02em; }
   .ps-timeline-org { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--gray-500); margin-bottom: 16px; text-transform: uppercase; }
   .ps-timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .ps-timeline-bullets li { font-size: 14px; line-height: 1.75; color: var(--gray-700); padding-left: 16px; position: relative; }
   .ps-timeline-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--gray-300); font-size: 12px; }
   .ps-timeline-gpa {
-    display: inline-block; margin-top: 12px; font-family: var(--mono);
-    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 12px; border: 1px solid var(--gray-100); color: var(--gray-500);
+    display: inline-block; margin-top: 12px; font-family: var(--sans);
+    font-size: 12px; font-weight: 500; letter-spacing: 0.02em; text-transform: none;
+    padding: 8px 16px; border: 1px solid var(--gray-300); color: var(--gray-700);
+    border-radius: var(--radius-pill); background: var(--white);
   }
 
-  .ps-exp-section { background: var(--black); color: var(--white); }
+  .ps-exp-section { background: var(--gray-50); color: var(--near-black); }
   .ps-exp-section .ps-section-label { color: var(--gray-500); }
-  .ps-exp-section .ps-section-label::after { background: var(--gray-700); }
-  .ps-exp-section .ps-section-title { color: var(--white); }
-  .ps-exp-section .ps-timeline-item { border-color: #1a1a1a; }
-  .ps-exp-section .ps-timeline-item:first-child { border-color: #1a1a1a; }
+  .ps-exp-section .ps-section-label::after { background: var(--gray-300); }
+  .ps-exp-section .ps-section-title { color: var(--near-black); }
+  .ps-exp-section .ps-timeline-item { border-color: var(--gray-200); }
+  .ps-exp-section .ps-timeline-item:first-child { border-color: var(--gray-200); }
   .ps-exp-section .ps-timeline-period { color: var(--gray-500); }
-  .ps-exp-section .ps-timeline-location { color: #3a3a3a; }
-  .ps-exp-section .ps-timeline-role { color: var(--white); }
+  .ps-exp-section .ps-timeline-location { color: var(--gray-700); }
+  .ps-exp-section .ps-timeline-role { color: var(--near-black); }
   .ps-exp-section .ps-timeline-org { color: var(--gray-500); }
-  .ps-exp-section .ps-timeline-bullets li { color: var(--gray-300); }
-  .ps-exp-section .ps-timeline-bullets li::before { color: #333; }
+  .ps-exp-section .ps-timeline-bullets li { color: var(--gray-700); }
+  .ps-exp-section .ps-timeline-bullets li::before { color: var(--gray-300); }
 
-  .ps-projects-section { background: var(--gray-100); }
+  .ps-projects-section { background: var(--gray-50); }
   .ps-projects-section .ps-section-label::after { background: var(--gray-300); }
   .ps-projects-grid {
     display: grid; grid-template-columns: repeat(2, 1fr);
@@ -296,13 +485,13 @@ const styles = `
     content: ''; position: absolute; top: 0; left: 0;
     width: 0; height: 2px; background: var(--black); transition: width 0.4s;
   }
-  .ps-project-card:hover { background: var(--gray-100); }
+  .ps-project-card:hover { background: var(--gray-50); }
   .ps-project-card:hover::before { width: 100%; }
-  .ps-project-num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; color: var(--gray-500); margin-bottom: 24px; }
-  .ps-project-title { font-family: var(--serif); font-size: 26px; line-height: 1.2; color: var(--black); margin-bottom: 16px; font-weight: 400; }
-  .ps-project-desc { font-size: 14px; line-height: 1.8; color: var(--gray-700); margin-bottom: 32px; }
+  .ps-project-num { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: var(--gray-500); margin-bottom: 20px; text-transform: uppercase; }
+  .ps-project-title { font-family: var(--sans); font-size: 24px; line-height: 1.25; color: var(--near-black); margin-bottom: 14px; font-weight: 600; letter-spacing: -0.02em; }
+  .ps-project-desc { font-size: 15px; line-height: 1.75; color: var(--gray-700); margin-bottom: 28px; }
   .ps-project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ps-project-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--gray-300); color: var(--gray-700); }
+  .ps-project-tag { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.02em; text-transform: none; padding: 8px 14px; border: 1px solid var(--gray-300); color: var(--gray-700); border-radius: var(--radius-pill); background: var(--white); }
 
   .ps-contact-inner { max-width: 680px; }
   .ps-contact-desc { font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 56px; }
@@ -323,7 +512,7 @@ const styles = `
     padding: 32px 60px; border-top: 1px solid var(--gray-100);
     display: flex; justify-content: space-between; align-items: center;
   }
-  .ps-footer span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--gray-500); }
+  .ps-footer span { font-family: var(--sans); font-size: 12px; letter-spacing: 0.02em; color: var(--gray-700); }
 
   .ps-reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s, transform 0.8s; }
   .ps-reveal.visible { opacity: 1; transform: translateY(0); }
@@ -338,13 +527,13 @@ const styles = `
     font-weight: 300;
   }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-  .ps-hero .typewriter-cursor { color: var(--white); }
-  .ps-exp-section .typewriter-cursor { color: var(--white); }
+  .ps-hero .typewriter-cursor { color: var(--black); }
+  .ps-exp-section .typewriter-cursor { color: var(--near-black); }
 
   /* ── CHATBOT ── */
   .chat-fab {
     position: fixed; bottom: 32px; right: 32px; z-index: 1000;
-    height: 60px; border-radius: 999px; padding: 0 28px 0 20px;
+    height: 56px; border-radius: var(--radius-pill); padding: 0 26px 0 22px;
     background: var(--black); border: none; cursor: none;
     display: flex; align-items: center; gap: 12px;
     box-shadow: 0 4px 32px rgba(0,0,0,0.22), 0 0 0 0 rgba(10,10,10,0.4);
@@ -354,8 +543,8 @@ const styles = `
   .chat-fab:hover { transform: scale(1.05); box-shadow: 0 8px 40px rgba(0,0,0,0.32); animation: none; }
   .chat-fab svg { width: 20px; height: 20px; color: var(--white); flex-shrink: 0; }
   .chat-fab-label {
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
-    color: var(--white); text-transform: uppercase; white-space: nowrap;
+    font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0;
+    color: var(--white); text-transform: none; white-space: nowrap;
   }
   @keyframes fabPulse {
     0%, 100% { box-shadow: 0 4px 32px rgba(0,0,0,0.22), 0 0 0 0 rgba(10,10,10,0.35); }
@@ -365,8 +554,10 @@ const styles = `
   .chat-window {
     position: fixed; bottom: 100px; right: 32px; z-index: 1000;
     width: 380px; height: 540px;
-    background: var(--white); border: 1px solid var(--gray-100);
-    box-shadow: 0 16px 64px rgba(0,0,0,0.12);
+    background: var(--white); border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    box-shadow: 0 12px 48px rgba(32, 33, 36, 0.14), 0 2px 8px rgba(32, 33, 36, 0.06);
+    overflow: hidden;
     display: flex; flex-direction: column;
     opacity: 0; pointer-events: none;
     transform: translateY(16px);
@@ -375,9 +566,9 @@ const styles = `
   .chat-window.open { opacity: 1; pointer-events: all; transform: translateY(0); }
 
   .chat-header {
-    padding: 20px 24px; border-bottom: 1px solid var(--gray-100);
+    padding: 18px 22px; border-bottom: 1px solid var(--gray-100);
     display: flex; align-items: center; justify-content: space-between;
-    background: var(--black);
+    background: var(--near-black);
   }
   .chat-header-left { display: flex; align-items: center; gap: 12px; }
   .chat-avatar {
@@ -404,14 +595,15 @@ const styles = `
   .chat-msg.user { align-self: flex-end; align-items: flex-end; }
   .chat-msg.assistant { align-self: flex-start; }
   .chat-bubble {
-    padding: 10px 14px; font-size: 13px; line-height: 1.6;
+    padding: 12px 16px; font-size: 13px; line-height: 1.55;
     font-family: var(--sans);
+    border-radius: 18px;
   }
   .chat-msg.user .chat-bubble { background: var(--black); color: var(--white); }
-  .chat-msg.assistant .chat-bubble { background: var(--gray-100); color: var(--black); }
+  .chat-msg.assistant .chat-bubble { background: var(--gray-100); color: var(--near-black); }
   .chat-sender { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--gray-500); text-transform: uppercase; }
 
-  .chat-typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; background: var(--gray-100); width: fit-content; }
+  .chat-typing { display: flex; gap: 4px; align-items: center; padding: 10px 16px; background: var(--gray-100); width: fit-content; border-radius: 18px; }
   .chat-typing span { width: 6px; height: 6px; background: var(--gray-500); border-radius: 50%; animation: typingDot 1.2s infinite; }
   .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
   .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
@@ -422,35 +614,39 @@ const styles = `
     display: flex; gap: 10px; align-items: center;
   }
   .chat-input {
-    flex: 1; border: 1px solid var(--gray-100); background: var(--white);
-    padding: 10px 14px; font-family: var(--sans); font-size: 13px;
+    flex: 1; border: 1px solid var(--gray-300); background: var(--gray-50);
+    padding: 12px 16px; font-family: var(--sans); font-size: 13px;
     color: var(--black); outline: none;
-    transition: border-color 0.2s;
+    border-radius: var(--radius-pill);
+    transition: border-color 0.2s, background 0.2s;
   }
-  .chat-input:focus { border-color: var(--black); }
+  .chat-input:focus { border-color: var(--gray-700); background: var(--white); }
   .chat-input::placeholder { color: var(--gray-300); }
   .chat-send {
-    width: 38px; height: 38px; background: var(--black); border: none;
+    width: 44px; height: 44px; background: var(--accent-action); border: none;
     cursor: none; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background 0.2s;
+    flex-shrink: 0; transition: background 0.2s; border-radius: 50%;
   }
-  .chat-send:hover { background: var(--gray-700); }
+  .chat-send:hover { background: #4338ca; }
   .chat-send svg { width: 16px; height: 16px; color: var(--white); }
-  .chat-send:disabled { background: var(--gray-300); }
+  .chat-send:disabled { background: var(--gray-300); opacity: 0.7; }
 
   .chat-suggestions {
     display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 12px;
   }
   .chat-suggestion {
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
-    padding: 5px 10px; border: 1px solid var(--gray-100);
-    background: none; color: var(--gray-700); cursor: none;
-    transition: border-color 0.2s, color 0.2s;
+    font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0;
+    padding: 8px 14px; border: 1px solid var(--gray-300);
+    background: var(--white); color: var(--gray-700); cursor: none;
+    border-radius: var(--radius-pill);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
     text-align: left;
   }
-  .chat-suggestion:hover { border-color: var(--black); color: var(--black); }
+  .chat-suggestion:hover { border-color: var(--gray-700); color: var(--near-black); background: var(--gray-50); }
 
   @media (max-width: 900px) {
+    .ps-current-glow { inset: -32px -12px; filter: blur(24px); }
+    .ps-current-card { padding: 32px 24px 36px; border-radius: 22px; grid-template-columns: 1fr; gap: 40px; }
     .ps-nav { padding: 24px 28px; }
     .ps-hero { grid-template-columns: 1fr; }
     .ps-hero-right { height: 420px; }
@@ -469,7 +665,7 @@ const styles = `
 const SKILLS = [
   "Java", "Swift", "Python", "JavaScript",
   "ReactJS", "NextJS", "Node.js", "Spring Boot",
-  "AWS", "Azure", "Docker", "Kubernetes", "Kafka", "PostgreSQL", "GraphQL", "MongoDB", "SQLite", "Redis",
+  "AWS", "Azure", "Docker", "Kubernetes", "Kafka", "PostgreSQL", "GraphQL", "MongoDB", "SQLite", "Redis", "RAG", "LLMs",
 ];
 
 const EXPERIENCE = [
@@ -504,7 +700,7 @@ const EXPERIENCE = [
 ];
 
 const EDUCATION = [
-  { period: "Aug 2024 – December 2026", location: "Tempe, Arizona", role: "Master of Science", org: "Computer Software Engineering · Arizona State University", gpa: "GPA 3.89" },
+  { period: "Aug 2024 – December 2026", location: "Tempe, Arizona", role: "Master of Science", org: "Computer Software Engineering · Arizona State University", gpa: "GPA 3.96" },
   { period: "Aug 2017 – May 2021", location: "Pune, Maharashtra", role: "Bachelor of Engineering", org: "Electronics & Telecommunications · Pune University", gpa: "GPA 3.01" },
 ];
 
@@ -522,6 +718,18 @@ const PROJECTS = [
     link: "https://github.com/1110tanmay/Healthcare-Revamp-",
   },
 ];
+
+const CURRENT_WORK = {
+  title: "Clinavis: Role-Aware AI for Electronic Health Records",
+  tagline: "Clinical notes are dense, jargon-heavy, and written for no one in particular. Clinavis fixes that.",
+  paragraphs: [
+    "I'm building an EHR intelligence platform that uses retrieval-augmented generation (RAG), role-aware prompting, and self-critique loops to transform complex clinical notes into summaries tailored to who's reading them — a physician gets a full clinical narrative, a nurse gets a shift-focused brief, and a patient gets a plain-language explanation they can actually understand.",
+    "Built on FastAPI, React, Supabase with pgvector, and the Anthropic Claude API. Designed with HIPAA compliance and privacy-first architecture from day one.",
+  ],
+  note: "Inspired by a personal hospital stay where I realized how much gets lost in translation between a chart and a patient.",
+  stack: ["FastAPI", "React", "Supabase", "pgvector", "Claude API", "HIPAA-first"],
+  link: "https://clinavis-frontend.vercel.app/"
+};
 
 const CONTACTS = [
   { platform: "Email", value: "tshelar@asu.edu", href: "mailto:tshelar@asu.edu" },
@@ -757,9 +965,10 @@ function Nav() {
 
   return (
     <nav className={`ps-nav ${scrolled ? "scrolled" : ""}`}>
-      <a className="ps-nav-logo" href="#">TS</a>
+      <a className="ps-nav-logo" href="#"><span className="ps-nav-logo-mark">Tanmay Shelar</span></a>
       <ul className="ps-nav-links">
         <li><a href="#about">About</a></li>
+        <li><a href="#current-work">Now</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#education">Education</a></li>
         <li><a href="#projects">Work</a></li>
@@ -774,13 +983,14 @@ function Hero() {
   return (
     <section className="ps-hero" id="hero">
       <SkillsCloud />
+      <div className="ps-hero-dot-field" aria-hidden />
       <div className="ps-hero-left">
-        <p className="ps-hero-tag ps-fadein" style={{ animationDelay: "0.4s", opacity: 0 }}>Software Engineer · Tempe, Arizona</p>
+        <p className="ps-hero-tag ps-fadein" style={{ animationDelay: "0.4s", opacity: 0 }}>Software & AI Engineer · Tempe, Arizona</p>
         <h1 className="ps-h1 ps-fadein" style={{ animationDelay: "0.7s", opacity: 0 }}>
           <Typewriter delay={700} segments={["Building things ", <em>that matter.</em>]} />
         </h1>
         <p className="ps-hero-desc ps-fadein" style={{ animationDelay: "0.95s", opacity: 0 }}>
-          I'm Tanmay Shelar — a graduate student in Software Engineering at ASU with 3+ years of industry experience in full-stack development, cloud platforms, and mobile ecosystems. Seeking full-time roles starting January 2027.
+          I'm Tanmay Shelar, a Software Engineering graduate student at ASU with 3+ years of experience across full-stack development, cloud platforms, mobile ecosystems, and applied AI. I build practical, privacy-conscious systems from AI-powered clinical summarization platforms using RAG and LLMs to wearable health applications with Swift, HealthKit, and on-device data processing. Seeking full-time Software Engineering or AI Engineering roles starting January 2027.
         </p>
         <div className="ps-hero-ctas ps-fadein" style={{ animationDelay: "1.15s", opacity: 0 }}>
           <a href="#projects" className="ps-btn-primary">View Work</a>
@@ -788,7 +998,7 @@ function Hero() {
         </div>
       </div>
       <div className="ps-hero-right">
-        <img src={photo} alt="Tanmay Shelar" style={{ width: '380px', height: '520px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }} />
+        <img className="ps-hero-photo" src={photo} alt="Tanmay Shelar" width={380} height={520} />
       </div>
     </section>
   );
@@ -804,21 +1014,80 @@ function About({ revealRef }) {
       </h2>
       <div className="ps-about-grid">
         <div className="ps-about-text ps-reveal" ref={revealRef}>
-          <p>I'm a Software Engineering graduate student at Arizona State University with hands-on experience building iOS + watchOS applications, privacy-first health-tech systems, and scalable full-stack tools used in production.</p>
-          <p>My work spans startups and research labs — from automating $100K+ in revenue at Zocdoc to building on-device health pipelines that are 100% PHI compliant and cloud-free.</p>
-          <p>When I'm not coding, you'll find me exploring new technologies, hiking trails around Tempe, or obsessing over the perfect pour-over.</p>
-          <p>Outside my work life, I love playing Tennis, Chess and Badminton. I also am a big-time hiker and love going outdoors.</p>
+          <p>I'm a Software Engineering graduate student at Arizona State University focused on building scalable, reliable systems across full-stack and AI-driven applications.</p>
+          <p>My experience spans production systems and research — from developing backend data pipelines and internal tools at Zocdoc to building privacy-first health-tech applications that process sensitive data entirely on-device.</p>
+          <p>I enjoy working at the intersection of software engineering, data, and AI — designing systems that are not just functional, but efficient, secure, and thoughtfully engineered.</p>
+          <p>Lately, I've been exploring AI-powered systems, including retrieval-based architectures and intelligent pipelines that turn complex data into meaningful insights.</p>
+          <p>Outside of engineering, I enjoy playing tennis, chess, and spending time outdoors — especially hiking.</p>
         </div>
         <div className="ps-reveal" ref={revealRef}>
           <div className="ps-skills-grid">
             {SKILLS.map(s => (<div className="ps-skill-item" key={s}><span className="ps-skill-dot" /><span className="ps-skill-name">{s}</span></div>))}
           </div>
           <div className="ps-stats-row">
-            {[["3+", "Years exp."], ["3.89", "MS GPA"], ["Dec '26", "Available"]].map(([n, l]) => (
+            {[["3+", "Years exp."], ["3.96", "MS GPA"], ["Dec '26", "Available"]].map(([n, l]) => (
               <div className="ps-stat" key={l}><div className="ps-stat-num">{n}</div><div className="ps-stat-label">{l}</div></div>
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Current work (Clinavis) ──
+function CurrentWork({ revealRef }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slides = [clinavis1, clinavis2, clinavis3, clinavis4, clinavis5];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide(prev => (prev + 1) % slides.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="ps-section ps-current-section" id="current-work">
+      <p className="ps-section-label ps-reveal" ref={revealRef}>Focus</p>
+      <h2 className="ps-section-title ps-reveal" ref={revealRef}>
+        <Typewriter delay={200} segments={["What am I currently ", "working on?"]} />
+      </h2>
+      <div className="ps-current-feature ps-reveal" ref={revealRef}>
+        <div className="ps-current-glow" aria-hidden />
+        <article className="ps-current-card">
+          <div className="ps-current-content">
+            <p className="ps-current-kicker">In progress</p>
+            <h3 className="ps-current-project-title">{CURRENT_WORK.title}</h3>
+            <p className="ps-current-tagline">{CURRENT_WORK.tagline}</p>
+            <div className="ps-current-body">
+              {CURRENT_WORK.paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+            <p className="ps-current-note">{CURRENT_WORK.note}</p>
+            <div className="ps-current-tags">
+              {CURRENT_WORK.stack.map(t => (
+                <span className="ps-current-tag" key={t}>{t}</span>
+              ))}
+            </div>
+            {CURRENT_WORK.link && (
+              <a href={CURRENT_WORK.link} target="_blank" rel="noopener noreferrer" className="ps-project-link" style={{ marginTop: '32px' }}>
+                Visit Clinavis →
+              </a>
+            )}
+          </div>
+          <div className="ps-current-slider">
+            {slides.map((src, idx) => (
+              <img 
+                key={idx} 
+                src={src} 
+                alt={`Clinavis dashboard screenshot ${idx + 1}`} 
+                className={`ps-current-slide ${idx === activeSlide ? "active" : ""}`} 
+              />
+            ))}
+          </div>
+        </article>
       </div>
     </section>
   );
@@ -952,9 +1221,9 @@ const cloudOptions = {
   maxSpeed: 0.01,
   minSpeed: 0.005,
   wheelZoom: false,
-  textFont: "var(--mono)",
-  textColour: "#E4C58F",
-  textHeight: 20,
+  textFont: "var(--sans)",
+  textColour: "rgba(95, 99, 104, 0.45)",
+  textHeight: 18,
 };
 
 function SkillsCloud() {
@@ -983,7 +1252,7 @@ function SkillsCloud() {
             style: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }
           }}
           canvasProps={{
-            style: { width: '100%', height: '100%', opacity: 0.8 }
+            style: { width: '100%', height: '100%', opacity: 0.5 }
           }}
         >
           {content}
@@ -1003,6 +1272,7 @@ export default function PersonalSite() {
       <Nav />
       <Hero />
       <About revealRef={revealRef} />
+      <CurrentWork revealRef={revealRef} />
       <Experience revealRef={revealRef} />
       <Education revealRef={revealRef} />
       <Projects revealRef={revealRef} />
