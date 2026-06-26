@@ -728,7 +728,7 @@ const CURRENT_WORK = {
   ],
   note: "Inspired by a personal hospital stay where I realized how much gets lost in translation between a chart and a patient.",
   stack: ["FastAPI", "React", "Supabase", "pgvector", "Claude API", "HIPAA-first"],
-  link: "https://clinavis-frontend.vercel.app/"
+  link: "https://github.com/1110tanmay/Clinavis.ai"
 };
 
 const CONTACTS = [
@@ -736,7 +736,7 @@ const CONTACTS = [
   { platform: "GitHub", value: "github.com/1110tanmay", href: "https://github.com/1110tanmay" },
   { platform: "LinkedIn", value: "linkedin.com/in/tanmay-shelar", href: "https://linkedin.com/in/tanmay-shelar/" },
   { platform: "Phone", value: "602-796-9188", href: "tel:6027969188" },
-  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=sharing" },
+  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=drive_link" },
 ];
 
 const SUGGESTIONS = [
@@ -1073,17 +1073,17 @@ function CurrentWork({ revealRef }) {
             </div>
             {CURRENT_WORK.link && (
               <a href={CURRENT_WORK.link} target="_blank" rel="noopener noreferrer" className="ps-project-link" style={{ marginTop: '32px' }}>
-                Visit Clinavis →
+                Checkout Clinavis Repository →
               </a>
             )}
           </div>
           <div className="ps-current-slider">
             {slides.map((src, idx) => (
-              <img 
-                key={idx} 
-                src={src} 
-                alt={`Clinavis dashboard screenshot ${idx + 1}`} 
-                className={`ps-current-slide ${idx === activeSlide ? "active" : ""}`} 
+              <img
+                key={idx}
+                src={src}
+                alt={`Clinavis dashboard screenshot ${idx + 1}`}
+                className={`ps-current-slide ${idx === activeSlide ? "active" : ""}`}
               />
             ))}
           </div>
