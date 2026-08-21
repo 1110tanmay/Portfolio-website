@@ -24,7 +24,7 @@ ABOUT TANMAY SHELAR:
 
 IDENTITY:
 - Graduate student in Software Engineering at Arizona State University, Tempe, Arizona
-- GPA: 3.96 (MS), 3.01 (BE)
+- GPA: 3.85 (MS), 3.01 (BE)
 - Available for full-time roles starting January 2027
 - Email: 1110tanmay@gmail.com | Phone: 602-796-9188
 - GitHub: github.com/1110tanmay | LinkedIn: linkedin.com/in/tanmay-shelar
@@ -53,7 +53,7 @@ ESCAFATE (Internship):
 - Reduced onboarding time by 10 days, post-launch issues by 85%
 
 EDUCATION:
-- MS Computer Software Engineering, ASU, Aug 2024 – December 2026, GPA 3.96
+- MS Computer Software Engineering, ASU, Aug 2024 – December 2026, GPA 3.85
 - BE Electronics & Telecommunications, Pune University, Aug 2017 – May 2021, GPA 3.01
 
 SKILLS:
@@ -700,7 +700,7 @@ const EXPERIENCE = [
 ];
 
 const EDUCATION = [
-  { period: "Aug 2024 – December 2026", location: "Tempe, Arizona", role: "Master of Science", org: "Computer Software Engineering · Arizona State University", gpa: "GPA 3.96" },
+  { period: "Aug 2024 – December 2026", location: "Tempe, Arizona", role: "Master of Science", org: "Computer Software Engineering · Arizona State University", gpa: "GPA 3.85" },
   { period: "Aug 2017 – May 2021", location: "Pune, Maharashtra", role: "Bachelor of Engineering", org: "Electronics & Telecommunications · Pune University", gpa: "GPA 3.01" },
 ];
 
@@ -1025,7 +1025,7 @@ function About({ revealRef }) {
             {SKILLS.map(s => (<div className="ps-skill-item" key={s}><span className="ps-skill-dot" /><span className="ps-skill-name">{s}</span></div>))}
           </div>
           <div className="ps-stats-row">
-            {[["3+", "Years exp."], ["3.96", "MS GPA"], ["Dec '26", "Available"]].map(([n, l]) => (
+            {[["3+", "Years exp."], ["3.85", "MS GPA"], ["Dec '26", "Available"]].map(([n, l]) => (
               <div className="ps-stat" key={l}><div className="ps-stat-num">{n}</div><div className="ps-stat-label">{l}</div></div>
             ))}
           </div>
