@@ -987,7 +987,7 @@ function Hero() {
       <div className="ps-hero-left">
         <p className="ps-hero-tag ps-fadein" style={{ animationDelay: "0.4s", opacity: 0 }}>Software & AI Engineer · Tempe, Arizona</p>
         <h1 className="ps-h1 ps-fadein" style={{ animationDelay: "0.7s", opacity: 0 }}>
-          <Typewriter delay={700} segments={["Building things ", <em>that matter.</em>]} />
+          <Typewriter delay={700} segments={["Well, this is awkward. ", <em>You found me.</em>]} />
         </h1>
         <p className="ps-hero-desc ps-fadein" style={{ animationDelay: "0.95s", opacity: 0 }}>
           I'm Tanmay Shelar, a Software Engineering graduate student at ASU with 3+ years of experience across full-stack development, cloud platforms, mobile ecosystems, and applied AI. I build practical, privacy-conscious systems from AI-powered clinical summarization platforms using RAG and LLMs to wearable health applications with Swift, HealthKit, and on-device data processing. Seeking full-time Software Engineering or AI Engineering roles starting January 2027.
@@ -1010,7 +1010,7 @@ function About({ revealRef }) {
     <section className="ps-section" id="about">
       <p className="ps-section-label ps-reveal" ref={revealRef}>About</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Crafting software", <br />, "with intention."]} />
+        <Typewriter delay={300} segments={["I build things. ", <br />, "Some of them are actually useful."]} />
       </h2>
       <div className="ps-about-grid">
         <div className="ps-about-text ps-reveal" ref={revealRef}>
