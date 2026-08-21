@@ -1051,7 +1051,7 @@ function CurrentWork({ revealRef }) {
     <section className="ps-section ps-current-section" id="current-work">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Focus</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={200} segments={["What am I currently ", "working on?"]} />
+        <Typewriter delay={200} segments={["Currently pulling my ", <br />, "hair out over."]} />
       </h2>
       <div className="ps-current-feature ps-reveal" ref={revealRef}>
         <div className="ps-current-glow" aria-hidden />
@@ -1099,7 +1099,7 @@ function Experience({ revealRef }) {
     <section className="ps-section ps-exp-section" id="experience">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Experience</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Where I've", <br />, "worked."]} />
+        <Typewriter delay={300} segments={["The places that trusted ", <br />, "me with their code."]} />
       </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EXPERIENCE.map((e, i) => (
@@ -1126,7 +1126,7 @@ function Education({ revealRef }) {
     <section className="ps-section" id="education">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Education</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Where I've", <br />, "studied."]} />
+        <Typewriter delay={300} segments={["Where I collected ", <br />, "my degrees:"]} />
       </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EDUCATION.map((e, i) => (
@@ -1153,7 +1153,7 @@ function Projects({ revealRef }) {
     <section className="ps-section ps-projects-section" id="projects">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Selected Work</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Projects I'm", <br />, "proud of."]} />
+        <Typewriter delay={300} segments={["Things that started ", <br />, "with “I wonder if…”"]} />
       </h2>
       <div className="ps-projects-grid ps-reveal" ref={revealRef}>
         {PROJECTS.map(p => (
@@ -1180,7 +1180,7 @@ function Contact({ revealRef }) {
     <section className="ps-section" id="contact">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Contact</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Let's build", <br />, "something together."]} />
+        <Typewriter delay={300} segments={["Let’s build something together. ", <br />, "Worst case, we exchange a few emails."]} />
       </h2>
       <div className="ps-contact-inner ps-reveal" ref={revealRef}>
         <p className="ps-contact-desc">Open to full-time Software Engineering roles starting January 2027. If you're working on something interesting, I'd love to hear about it.</p>
