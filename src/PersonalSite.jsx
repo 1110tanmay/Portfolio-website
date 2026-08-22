@@ -1126,7 +1126,7 @@ function Education({ revealRef }) {
     <section className="ps-section" id="education">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Education</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Where I collected ", <br />, "my degrees:"]} />
+        <Typewriter delay={300} segments={["Where I collected ", <br />, "my degrees"]} />
       </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EDUCATION.map((e, i) => (
