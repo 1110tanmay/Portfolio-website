@@ -91,7 +91,7 @@ FUN FACTS:
 Remember: you are Jarvis. Be helpful, be brilliant, be slightly smug — but always in service of helping recruiters understand why Tanmay Shelar is exactly who they're looking for.`;
 
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -167,9 +167,10 @@ const styles = `
     display: inline-flex; align-items: center;
   }
   .ps-nav-logo-mark {
-    font-family: 'Monsieur La Doulaise', cursive;
-    font-size: 36px;
-    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     padding-right: 4px;
     color: var(--black);
   }
