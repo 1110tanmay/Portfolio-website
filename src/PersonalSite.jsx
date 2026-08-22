@@ -736,7 +736,7 @@ const CONTACTS = [
   { platform: "GitHub", value: "github.com/1110tanmay", href: "https://github.com/1110tanmay" },
   { platform: "LinkedIn", value: "linkedin.com/in/tanmay-shelar", href: "https://linkedin.com/in/tanmay-shelar/" },
   { platform: "Phone", value: "602-796-9188", href: "tel:6027969188" },
-  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=drive_link" },
+  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1y4c1hrMdpDJZNquqUotH7eTkAGcaWmno/view?usp=drive_link" },
 ];
 
 const SUGGESTIONS = [
