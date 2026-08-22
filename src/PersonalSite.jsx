@@ -91,7 +91,7 @@ FUN FACTS:
 Remember: you are Jarvis. Be helpful, be brilliant, be slightly smug — but always in service of helping recruiters understand why Tanmay Shelar is exactly who they're looking for.`;
 
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -167,9 +167,10 @@ const styles = `
     display: inline-flex; align-items: center;
   }
   .ps-nav-logo-mark {
-    font-family: 'Monsieur La Doulaise', cursive;
-    font-size: 36px;
-    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     padding-right: 4px;
     color: var(--black);
   }
@@ -736,7 +737,7 @@ const CONTACTS = [
   { platform: "GitHub", value: "github.com/1110tanmay", href: "https://github.com/1110tanmay" },
   { platform: "LinkedIn", value: "linkedin.com/in/tanmay-shelar", href: "https://linkedin.com/in/tanmay-shelar/" },
   { platform: "Phone", value: "602-796-9188", href: "tel:6027969188" },
-  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1kza-oXXoKMrxJEFJzOJIQC3kdtcEAMtM/view?usp=drive_link" },
+  { platform: "Resume", value: "Latest Resume", href: "https://drive.google.com/file/d/1y4c1hrMdpDJZNquqUotH7eTkAGcaWmno/view?usp=drive_link" },
 ];
 
 const SUGGESTIONS = [
@@ -1126,7 +1127,7 @@ function Education({ revealRef }) {
     <section className="ps-section" id="education">
       <p className="ps-section-label ps-reveal" ref={revealRef}>Education</p>
       <h2 className="ps-section-title ps-reveal" ref={revealRef}>
-        <Typewriter delay={300} segments={["Where I collected ", <br />, "my degrees:"]} />
+        <Typewriter delay={300} segments={["Where I collected ", <br />, "my degrees"]} />
       </h2>
       <div className="ps-timeline ps-reveal" ref={revealRef}>
         {EDUCATION.map((e, i) => (
