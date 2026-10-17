@@ -22,7 +22,7 @@ function RoleRotator() {
   const n = HERO.roles.length;
   const current = tick % n;
   return (
-    <p className="role-line">
+    <p className="role-line" data-reveal="" style={{ '--d': '0.08s' }}>
       <span>Tanmay Shelar</span>
       <span className="sep" aria-hidden="true">/</span>
       <span className="sr-only">{HERO.roles.join(', ')}</span>
@@ -38,7 +38,7 @@ function RoleRotator() {
 function Glance() {
   const [ref, inView] = useInView({ threshold: 0.4 });
   return (
-    <div ref={ref} className="glance" aria-label="At a glance">
+    <div ref={ref} className="glance" aria-label="At a glance" data-reveal="" style={{ '--d': '0.1s' }}>
       {HERO.glance.map((g, i) => (
         <div key={g.l}>
           <span className="glance-v">
@@ -55,7 +55,7 @@ function Glance() {
 
 export default function Hero({ onAsk }) {
   return (
-    <section id="top" className="hero">
+    <section id="top" className="hero hero-depth">
       <div aria-hidden="true">
         {AURAS.map((a) => (
           <div key={a.left} className="follow" style={{ left: a.left, top: a.top, '--fx': a.fx, '--fy': a.fy }}>
@@ -66,7 +66,7 @@ export default function Hero({ onAsk }) {
 
       <div className="wrap hero-grid">
         <div className="hero-copy">
-          <div className="avail">
+          <div className="avail" data-reveal="">
             <span className="pulse" style={{ background: '#30d158', color: '#30d158' }} aria-hidden="true" />
             <strong>Available December 2026</strong>
             <span aria-hidden="true" style={{ color: '#48484a' }}>·</span>
@@ -78,6 +78,8 @@ export default function Hero({ onAsk }) {
           <TypeHeading
             as="h1"
             className="h1"
+            data-reveal=""
+            style={{ '--d': '0.16s' }}
             delay={300}
             parts={[
               { text: 'Software built to be ' },
@@ -85,14 +87,14 @@ export default function Hero({ onAsk }) {
             ]}
           />
 
-          <p className="hero-sub">Full-stack, iOS and applied-AI engineer. I learned in healthcare, where privacy, uptime and accuracy aren't optional, and I bring that standard to every product.</p>
+          <p className="hero-sub" data-reveal="" style={{ '--d': '0.26s' }}>Full-stack, iOS and applied-AI engineer. I learned in healthcare, where privacy, uptime and accuracy aren't optional, and I bring that standard to every product.</p>
 
-          <div className="hero-ctas">
+          <div className="hero-ctas" data-reveal="" style={{ '--d': '0.34s' }}>
             <a className="ghost" href={LINKS.resume} target="_blank" rel="noopener noreferrer">View Resume</a>
             <button type="button" className="link-btn" onClick={onAsk}>Ask Martha, my AI agent ›</button>
           </div>
 
-          <a className="tv-chip" href={NEWS.tv.href} target="_blank" rel="noopener noreferrer">
+          <a className="tv-chip" data-reveal="" style={{ '--d': '0.42s' }} href={NEWS.tv.href} target="_blank" rel="noopener noreferrer">
             <span className="tv-thumb">
               <img src={NEWS.tv.thumb} alt="" />
               <span className="center-overlay" style={{ background: 'rgba(0,0,0,.2)' }}><YouTubeLogo width={34} /></span>
@@ -105,7 +107,7 @@ export default function Hero({ onAsk }) {
           </a>
         </div>
 
-        <div className="portrait-wrap">
+        <div className="portrait-wrap" data-reveal="" style={{ '--d': '0.2s', '--ry': '24px' }}>
           <div aria-hidden="true" className="follow" style={{ inset: -28, borderRadius: 52, background: 'conic-gradient(from 210deg, #2997ff, #64d2ff, #30d158, #ff9f0a, #bf5af2, #2997ff)', filter: 'blur(40px)', opacity: 0.45, '--fx': '40px', '--fy': '30px' }} />
           <img src={PORTRAIT} alt="Portrait of Tanmay Shelar" width="470" height="470" />
         </div>

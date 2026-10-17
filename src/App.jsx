@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SHEETS } from './content';
-import { useMouseVars } from './hooks';
+import { useMouseVars, useRevealOnScroll } from './hooks';
 import { Footer, Nav } from './sections/Layout';
 import Hero from './sections/Hero';
 import { HowIWork, Proof } from './sections/Proof';
@@ -11,6 +11,7 @@ import Martha from './components/Martha';
 
 export default function App() {
   useMouseVars();
+  useRevealOnScroll();
   const [sheetKey, setSheetKey] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [seed, setSeed] = useState(null);

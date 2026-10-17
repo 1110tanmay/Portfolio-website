@@ -7,12 +7,12 @@ import { GitHubLogo, Icon, LinkedInLogo, MailLogo, YouTubeLogo } from '../compon
 export function Education() {
   const [ref, inView] = useInView({ threshold: 0.3 });
   return (
-    <section id="education" className="wrap section">
-      <p className="eyebrow">Education</p>
-      <TypeHeading className="h2" style={{ marginBottom: 56 }} parts={[{ text: 'Where I learned ' }, { text: 'the fundamentals.', className: 'muted' }]} />
+    <section id="education" className="wrap section depth">
+      <p className="eyebrow" data-reveal="">Education</p>
+      <TypeHeading className="h2" data-reveal="" style={{ marginBottom: 56, '--d': '0.08s' }} parts={[{ text: 'Where I learned ' }, { text: 'the fundamentals.', className: 'muted' }]} />
       <div ref={ref} className="edu-grid">
         {EDUCATION.map((e, i) => (
-          <article key={e.school} className="card edu">
+          <article key={e.school} className="card edu" data-reveal="" style={{ '--d': `${0.12 + i * 0.12}s` }}>
             <div aria-hidden="true" className="follow" style={{ right: -160, top: -200 }}>
               <div className="glow-orb" style={{ width: 480, height: 480, background: `radial-gradient(circle, ${e.glow} 0%, transparent 70%)`, filter: 'blur(20px)' }} />
             </div>
@@ -41,11 +41,11 @@ export function Education() {
 export function News() {
   const { tv, medium } = NEWS;
   return (
-    <section id="news" className="wrap section">
-      <p className="eyebrow">In the news</p>
-      <TypeHeading className="h2" style={{ marginBottom: 56 }} parts={[{ text: 'On air, ' }, { text: 'and on the record.', className: 'muted' }]} />
+    <section id="news" className="wrap section depth">
+      <p className="eyebrow" data-reveal="">In the news</p>
+      <TypeHeading className="h2" data-reveal="" style={{ marginBottom: 56, '--d': '0.08s' }} parts={[{ text: 'On air, ' }, { text: 'and on the record.', className: 'muted' }]} />
       <div className="news-grid">
-        <a className="card media tv-hero" href={tv.href} target="_blank" rel="noopener noreferrer">
+        <a className="card media tv-hero" data-reveal="" style={{ '--d': '0.14s' }} href={tv.href} target="_blank" rel="noopener noreferrer">
           <div aria-hidden="true" className="follow" style={{ left: -200, bottom: -260 }}>
             <div className="glow-orb" style={{ width: 640, height: 640, background: 'radial-gradient(circle, rgba(255,55,95,.3) 0%, rgba(255,159,10,.12) 40%, transparent 70%)', filter: 'blur(30px)' }} />
           </div>
@@ -62,7 +62,7 @@ export function News() {
             <span style={{ fontSize: 17, color: 'var(--link)', marginTop: 4 }}>Watch on YouTube ›</span>
           </span>
         </a>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div data-reveal="" style={{ display: 'flex', flexDirection: 'column', gap: 24, '--d': '0.26s' }}>
           <a className="card media medium-card" href={medium.href} target="_blank" rel="noopener noreferrer">
             <span className="kicker-sm" style={{ fontSize: 13, color: 'var(--text-2)' }}>On Medium · {medium.date}</span>
             <span className="serif" style={{ fontSize: 36, lineHeight: 1.15 }}>{medium.title}</span>
@@ -126,7 +126,7 @@ export function Contact() {
   return (
     <section id="contact" className="wrap section" style={{ paddingBottom: 140 }}>
       <div className="contact-grid">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div data-reveal="" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <p className="eyebrow" style={{ margin: 0 }}>Contact</p>
           <TypeHeading
             className="h2"
@@ -150,7 +150,7 @@ export function Contact() {
           </nav>
         </div>
 
-        <form className="card form" onSubmit={submit} aria-label="Send Tanmay a message">
+        <form className="card form" data-reveal="" style={{ '--d': '0.14s' }} onSubmit={submit} aria-label="Send Tanmay a message">
           <div aria-hidden="true" className="follow" style={{ right: -200, bottom: -240 }}>
             <div className="glow-orb" style={{ width: 520, height: 520, background: 'radial-gradient(circle, rgba(41,151,255,.24) 0%, rgba(191,90,242,.12) 40%, transparent 70%)', filter: 'blur(24px)' }} />
           </div>

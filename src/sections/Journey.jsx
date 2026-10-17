@@ -80,7 +80,7 @@ export default function Journey({ onOpen }) {
   return (
     <section id="journey" className="wrap section" style={{ paddingBottom: 140 }}>
       <div className="journey">
-        <div className="journey-side">
+        <div className="journey-side" data-reveal="">
           <div>
             <p className="eyebrow">The journey</p>
             <TypeHeading className="h2" parts={[{ text: 'From production data to applied AI.' }]} />
@@ -106,7 +106,7 @@ export default function Journey({ onOpen }) {
           <p style={{ margin: 0, fontSize: 13, color: 'var(--text-4)' }}>Chapter {active + 1} of {CHAPTERS.length}</p>
         </div>
 
-        <div ref={ref} className="chapter-stage">
+        <div ref={ref} className="chapter-stage" data-reveal="" style={{ '--d': '0.12s', '--ry': '64px' }}>
           {CHAPTERS.map((c, i) => (
             <Chapter
               key={c.key}

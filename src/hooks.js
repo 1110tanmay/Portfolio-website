@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 const REDUCE_QUERY = '(prefers-reduced-motion: reduce)';
 
@@ -43,6 +43,31 @@ export function useTick(ms = 3600) {
     return () => clearInterval(id);
   }, [ms, reduce]);
   return tick;
+}
+
+// Apple-style scroll reveal. Every [data-reveal] element fades up into focus the first
+// time it enters the viewport; `--d` on the element staggers it. The hiding class is added
+// before first paint (layout effect), and only when the reveal can actually run, so content
+// is never stuck invisible without JS, without IntersectionObserver or under reduced motion.
+export function useRevealOnScroll() {
+  const reduce = useReducedMotion();
+  useLayoutEffect(() => {
+    if (reduce || typeof IntersectionObserver === 'undefined') return undefined;
+    const root = document.documentElement;
+    root.classList.add('reveal-ready');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('[data-reveal]').forEach((el) => obs.observe(el));
+    return () => {
+      obs.disconnect();
+      root.classList.remove('reveal-ready');
+    };
+  }, [reduce]);
 }
 
 // Writes the pointer position (-0.5..0.5) to --mx / --my on <html>, so glows and

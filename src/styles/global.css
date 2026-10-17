@@ -422,3 +422,42 @@ textarea.field { height: auto; min-height: 120px; padding: 14px 16px; resize: ve
   .glance-v small { font-size: 16px; }
   .role-line { font-size: 19px; }
 }
+
+/* ── Scroll choreography (Apple-style) ──
+   1. Reveal: [data-reveal] elements rise, sharpen and fade in as they enter (all browsers).
+      Uses an animation with fill-mode "backwards" so that once it ends, the element's own
+      transitions (e.g. tile hover lift) work normally again.
+   2. Overlap + depth: scroll-driven, where supported. The hero lags and dims while Proof
+      slides over it; finished sections recede slightly as you move on. */
+.reveal-ready [data-reveal]:not(.in) { opacity: 0; }
+.reveal-ready [data-reveal].in { animation: reveal-up 1.15s var(--ease) var(--d, 0s) backwards; }
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(var(--ry, 44px)) scale(0.97); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Full-bleed black backdrop so the section can slide over the hero. */
+.overlap { position: relative; z-index: 1; background: var(--bg); box-shadow: 0 0 0 100vmax var(--bg); clip-path: inset(0 -100vmax); }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-depth {
+      animation: hero-recede linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+      transform-origin: 50% 0%;
+    }
+    @keyframes hero-recede {
+      to { transform: translateY(28%) scale(0.9); opacity: 0.15; }
+    }
+    .depth {
+      animation: section-recede linear both;
+      animation-timeline: view();
+      animation-range: exit 45% exit 100%;
+      transform-origin: 50% 100%;
+    }
+    @keyframes section-recede {
+      to { transform: scale(0.96); opacity: 0.35; }
+    }
+  }
+}

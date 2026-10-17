@@ -39,7 +39,7 @@ export function Odometer({ value, gradient, active, delay = 0 }) {
 // Types its parts out once the heading scrolls into view. An invisible copy of the full
 // text reserves the final layout so nothing shifts while typing.
 // parts: [{ text, className?, style? }]
-export function TypeHeading({ as = 'h2', parts, className = '', style, speed = 42, delay = 0 }) {
+export function TypeHeading({ as = 'h2', parts, className = '', style, speed = 42, delay = 0, ...rest }) {
   const Tag = as;
   const reduce = useReducedMotion();
   const [ref, inView] = useInView({ once: true, threshold: 0.4 });
@@ -67,7 +67,7 @@ export function TypeHeading({ as = 'h2', parts, className = '', style, speed = 4
   });
 
   return (
-    <Tag ref={ref} className={`type ${className}`} style={style} aria-label={parts.map((p) => p.text).join('')}>
+    <Tag ref={ref} {...rest} className={`type ${className}`} style={style} aria-label={parts.map((p) => p.text).join('')}>
       <span className="type-ghost" aria-hidden="true">
         {parts.map((p, i) => <span key={i} className={p.className}>{p.text}</span>)}
       </span>

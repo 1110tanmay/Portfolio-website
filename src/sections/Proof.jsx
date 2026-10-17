@@ -16,7 +16,7 @@ function Tile({ tile, index, active, onOpen }) {
   const props = tile.href ? { href: tile.href } : { type: 'button', onClick: () => onOpen(tile.sheet) };
 
   return (
-    <Tag className={`card tile ${size === 'small' ? '' : size}`} aria-label={tile.label} {...props}>
+    <Tag className={`card tile ${size === 'small' ? '' : size}`} aria-label={tile.label} data-reveal="" style={{ '--d': `${index * 0.07}s` }} {...props}>
       <div aria-hidden="true" className="follow" style={spot}>
         <div className="glow-orb" style={{ width: glowSize, height: glowSize, background: `radial-gradient(circle, ${tile.glow} 0%, transparent 70%)`, filter: `blur(${size === 'small' ? 10 : 18}px)` }} />
       </div>
@@ -51,10 +51,10 @@ function Tile({ tile, index, active, onOpen }) {
 export function Proof({ onOpen }) {
   const [ref, inView] = useInView({ threshold: 0.25 });
   return (
-    <section id="proof" className="wrap section">
-      <p className="eyebrow">The proof</p>
-      <TypeHeading className="h2" style={{ marginBottom: 16 }} parts={[{ text: 'Results, not adjectives.' }]} />
-      <p className="lede" style={{ fontSize: 19, color: 'var(--text-3)' }}>Tap any number for the story behind it.</p>
+    <section id="proof" className="wrap section overlap depth">
+      <p className="eyebrow" data-reveal="">The proof</p>
+      <TypeHeading className="h2" data-reveal="" style={{ marginBottom: 16, '--d': '0.08s' }} parts={[{ text: 'Results, not adjectives.' }]} />
+      <p className="lede" data-reveal="" style={{ fontSize: 19, color: 'var(--text-3)', '--d': '0.16s' }}>Tap any number for the story behind it.</p>
       <div ref={ref} className="bento">
         {TILES.map((t, i) => <Tile key={t.id} tile={t} index={i} active={inView} onOpen={onOpen} />)}
       </div>
@@ -64,13 +64,13 @@ export function Proof({ onOpen }) {
 
 export function HowIWork() {
   return (
-    <section id="why" className="wrap section">
-      <p className="eyebrow">How I work</p>
-      <TypeHeading className="h2" style={{ maxWidth: 980 }} parts={[{ text: 'Healthcare taught me ' }, { text: 'the hard version first.', className: 'muted' }]} />
-      <p className="lede">Patient data, compliance audits, clinicians who can't afford a wrong answer. Building there set my bar for everything else.</p>
+    <section id="why" className="wrap section depth">
+      <p className="eyebrow" data-reveal="">How I work</p>
+      <TypeHeading className="h2" data-reveal="" style={{ maxWidth: 980, '--d': '0.08s' }} parts={[{ text: 'Healthcare taught me ' }, { text: 'the hard version first.', className: 'muted' }]} />
+      <p className="lede" data-reveal="" style={{ '--d': '0.16s' }}>Patient data, compliance audits, clinicians who can't afford a wrong answer. Building there set my bar for everything else.</p>
       <div className="pillars">
-        {PILLARS.map((p) => (
-          <div key={p.title} className="card pillar">
+        {PILLARS.map((p, i) => (
+          <div key={p.title} className="card pillar" data-reveal="" style={{ '--d': `${0.1 + i * 0.1}s` }}>
             <Icon name={p.icon} size={34} color={p.color} />
             <h3>{p.title}</h3>
             <p>{p.body}</p>
