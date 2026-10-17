@@ -7,38 +7,44 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run dev`: Vite dev server with HMR
 - `npm run build`: production build into `dist/` (gitignored)
 - `npm run preview`: serve the built `dist/`
-- `npm run lint`: ESLint (flat config in `eslint.config.js`; react-hooks + react-refresh rules, and `no-unused-vars` ignores names matching `^[A-Z_]`)
+- `npm run lint`: ESLint (flat config in `eslint.config.js`; react-hooks v7 rules, which include React Compiler purity checks such as no reassigning variables during render, and `no-unused-vars` ignores names matching `^[A-Z_]`; `dist` and `.venv` are ignored)
 
 There is no test suite and no TypeScript. The `.venv/` directory is not used by the site.
 
 ## Architecture
 
-This is a single-page personal portfolio built with Vite and React 19 (plain JSX). `main.jsx` → `App.jsx` → `PersonalSite.jsx`, and almost all of the site lives in `src/PersonalSite.jsx`:
+This is a single-page portfolio built with Vite and React 19 (plain JSX) in an Apple "Dark Pro" style: black background, glowing gradients, large type. The page is a story: Hero → Proof (bento of stats) → How I work → Journey (5 chapters) → Education → In the news → Contact. Clicking a tile or "Read the story" opens a story sheet with the details.
 
-- **Styling** is one big template string, `styles`, rendered through `<style>{styles}</style>` in the root component. Every class uses the `ps-` prefix (`chat-` for the chatbot). Design tokens (colors, fonts, the `--spectrum-*` accent palette, `--radius-pill`) are CSS variables on `:root` inside that string, and Google Fonts (Montserrat, Inter, DM Mono) are loaded with an `@import` there too. The responsive breakpoint is a single `@media (max-width: 900px)` block at the end. `src/index.css` is still the Vite template stylesheet and is imported globally; the embedded styles override it. `src/App.css` and `src/assets/hero-bg.mp4` are not imported anywhere.
-- **Content** comes from data constants near the top of the file (`SKILLS`, `EXPERIENCE`, `EDUCATION`, `PROJECTS`, `CURRENT_WORK`, `CONTACTS`, `SUGGESTIONS`). Section components (`Hero`, `About`, `CurrentWork`, `Experience`, `Education`, `Projects`, `Contact`) render these constants. Copy changes usually belong in the constants, not the JSX. Some copy is still hardcoded in the JSX, though, such as the hero paragraph, the About paragraphs, and the stats row.
-- **Section headings** use `<Typewriter segments={[...]} />`. Segments can be strings, which are typed out character by character, or React nodes such as `<br />` or `<em>`, which appear once typing reaches them. Typing starts when the heading scrolls into view.
-- **Scroll reveal**: `useReveal()` in the root component returns a callback ref that is passed to each section as `revealRef`. Any element with class `ps-reveal` and `ref={revealRef}` gets the `visible` class from a shared IntersectionObserver.
-- **Custom cursor**: `body` sets `cursor: none`, and the `Cursor` component draws the pointer, which expands over any `a` or `button`. New interactive elements should also set `cursor: none` to match.
-- **Hero background** is a `react-icon-cloud` `<Cloud>` (`SkillsCloud`) that shows `SKILLS` plus a local `extraSkills` list as a rotating tag cloud.
-- **Chatbot ("Tamy")** calls the Groq OpenAI-compatible API directly from the browser. The key comes from `VITE_GROQ_API_KEY` in `.env` (gitignored). Because of the `VITE_` prefix, the key is bundled into the client JS. The bot's persona and all of its facts about Tanmay are in the `SYSTEM_PROMPT` string.
+- **`src/content.js` is the single source of truth** for copy, stats, links, images, story sheets (`SHEETS`), Journey chapters (`CHAPTERS`), Zocdoc `AWARDS`, `EDUCATION`, `NEWS` and the chatbot. `buildMarthaPrompt()` builds the chatbot's system prompt from the same data, so the bot can't contradict the page. Copy changes belong here, not in components. Facts must come from the resume or the user: never invent stats.
+- **`src/App.jsx`** composes the sections and owns the shared UI state: which story sheet is open (`sheetKey`, a key of `SHEETS`) and whether Martha's chat is open. Sections receive `onOpen(sheetKey)`.
+- **`src/sections/`**: `Hero`, `Proof` (also exports `HowIWork`), `Journey`, `Closing` (`Education`, `News`, `Contact`) and `Layout` (`Nav`, `Footer`).
+- **`src/components/`**:
+  - `Motion.jsx`: `Odometer`, where each digit rolls through 0–9 and is driven by an `active` flag, and `TypeHeading`, which types its parts out once in view.
+  - `Visuals.jsx`: `Slideshow`, `DeviceStage` (iPhone + Watch), `AwardsStage` and `IconStage`.
+  - `StorySheet.jsx`: a native `<dialog>` with `showModal()`.
+  - `Martha.jsx`: the chatbot.
+  - `icons.jsx`: inline SVGs and brand logos.
+- **`src/hooks.js`**:
+  - `useInView`: `once` keeps it true; otherwise it flips back so odometers replay on re-entry.
+  - `useReducedMotion`.
+  - `useTick`: a slideshow timer, paused under reduced motion.
+  - `useMouseVars`: writes the pointer position to the CSS vars `--mx` and `--my` on `<html>`. Elements with class `.follow` and `--fx`/`--fy` drift toward the cursor in pure CSS, with no React re-renders. Martha's eyes use the same vars.
+- **Styling** lives in `src/styles/global.css`: tokens on `:root`, component classes, a breakpoint at 1000px (tablet) and one at 600px (phone, single-column bento). Inline styles are used for per-item data such as gradients and glow colors.
+- **Gotcha:** for gradient text, set `backgroundImage`, never the `background` shorthand. The shorthand resets `background-clip: text`, and numbers render as solid color blocks. `background-clip: text` also doesn't reach into transformed children, which is why each odometer strip clips its own gradient.
+- **Assets**: everything is under `src/assets/`, already optimized, and imported in `content.js`. Logos (`logos/asu.png`, `logos/zocdoc.png`) are official, recolored for dark backgrounds. The Smart Heat Tracker images and architecture diagram come from the SmartHeat-Tracker repo README. The Clinavis architecture diagram comes from that repo's `docs/architecture.svg`.
 
-## Chatbot model (Groq free tier)
+## Chatbot ("Martha", Groq free tier)
 
-- The model is `openai/gpt-oss-120b` with `reasoning_effort: "low"`. The user chose Groq's free tier: no card, but limited to roughly 30 requests/min, 8K tokens/min and 200K tokens/day.
-- Groq retired `llama-3.3-70b-versatile` in 2026. Requests for it return `404 model_not_found`, and the UI hides the error behind its generic fallback reply ("momentary lapse"). If the bot shows that fallback, first check that the model still exists: `GET https://api.groq.com/openai/v1/models` with the key.
-- `gpt-oss` spends tokens on reasoning, which count toward `max_tokens` (300). Low reasoning effort keeps replies from being cut off or coming back empty.
-- The chat bubble renders raw text, so the prompt requires plain-text replies. Without that rule, the model emits `**bold**`.
-- Fallback model: `qwen/qwen3.8-27b`.
+- `Martha.jsx` calls the Groq OpenAI-compatible API directly from the browser with `VITE_GROQ_API_KEY`. Because of the `VITE_` prefix, the key is inlined into the client bundle and visible to anyone. A planned follow-up is to move the call behind a Vercel serverless function (`api/chat.js`, using `GROQ_API_KEY`) and rotate the key afterwards.
+- The model is `openai/gpt-oss-120b` with `reasoning_effort: "low"`; the fallback model is `qwen/qwen3.8-27b`. The user chose Groq's free tier: no card, but limited to roughly 30 requests/min, 8K tokens/min and 200K tokens/day. A 429 shows a polite "give me a moment" reply.
+- Groq retired `llama-3.3-70b-versatile` in 2026. If Martha only returns the "momentary lapse" fallback, first check that the model still exists: `GET https://api.groq.com/openai/v1/models` with the key.
+- `gpt-oss` reasoning tokens count toward `max_tokens`. The prompt requires plain-text replies, because the chat bubble renders raw text and the model otherwise emits `**bold**`.
 - Meta's Muse Spark (Meta Model API, OpenAI-compatible) was considered but is paid-only, so it was not chosen.
 
 ## Deployment
 
-- The site is hosted on Vercel (tanmayshelar.vercel.app) through its GitHub integration with `origin` = `github.com/1110tanmay/Portfolio-website`. There is no Vercel CLI or `vercel.json`, so deploying means pushing to GitHub.
-- Work happens on the `upgrade` branch. Releases go to `main`. To deploy without switching branches: `git push origin upgrade && git push origin upgrade:main`. The second push fast-forwards `main` to `upgrade`.
-- `VITE_GROQ_API_KEY` must also be set in the Vercel project's environment variables, because it is inlined at build time.
-- Git auth uses the macOS Keychain HTTPS credential, and there are no SSH keys. If a push fails with "Invalid username or token", the user has to sign in to GitHub again (in VS Code or with a personal access token). Claude cannot do that non-interactively.
-
-## Keeping content in sync
-
-Facts about Tanmay are duplicated between `SYSTEM_PROMPT` and the rendered data constants and hardcoded copy, such as dates, GPA, availability, and contact details. When you change one, update the other so the chatbot doesn't contradict the page.
+- The site is hosted on Vercel (tanmayshelar.vercel.app) through its GitHub integration with `origin` = `github.com/1110tanmay/Portfolio-website`. There is no Vercel CLI or `vercel.json`, so deploying means pushing to GitHub. Vercel serves `main` about 30 seconds after a push.
+- Work happens on `upgrade`. To deploy without switching branches: `git push origin upgrade && git push origin upgrade:main`, which fast-forwards `main`. The user prefers small commits that go straight to the live site.
+- The Vercel project has its own `VITE_GROQ_API_KEY`, which differs from the local `.env` key; both are valid. It is inlined at build time.
+- Git auth uses the macOS Keychain HTTPS credential, and there are no SSH keys. If a push fails with "Invalid username or token" or "could not read Username", the user has to sign in again from their own terminal (a personal access token as the password) or through VS Code's Sync. Claude cannot do that non-interactively.
+- Verifying layout: headless Chrome won't render windows narrower than about 500px. To check phone width, load the site inside a 390px `<iframe>` and screenshot that.

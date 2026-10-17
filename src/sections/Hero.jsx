@@ -1,0 +1,68 @@
+import { LINKS, NEWS, PORTRAIT } from '../content';
+import { TypeHeading } from '../components/Motion';
+import { YouTubeLogo } from '../components/icons';
+
+const AURAS = [
+  { left: '48%', top: -160, size: 820, fx: '180px', fy: '120px', cls: 'drift', bg: 'radial-gradient(circle, rgba(48,209,88,.32) 0%, rgba(100,210,255,.2) 35%, transparent 68%)', blur: 40 },
+  { left: '2%', top: 240, size: 700, fx: '-140px', fy: '-110px', cls: 'drift-2', bg: 'radial-gradient(circle, rgba(191,90,242,.3) 0%, rgba(41,151,255,.16) 40%, transparent 70%)', blur: 50 },
+  { left: '72%', top: 440, size: 460, fx: '90px', fy: '-140px', cls: 'drift', bg: 'radial-gradient(circle, rgba(255,159,10,.22) 0%, transparent 70%)', blur: 40 },
+];
+
+export default function Hero({ onAsk }) {
+  return (
+    <section id="top" className="hero">
+      <div aria-hidden="true">
+        {AURAS.map((a) => (
+          <div key={a.left} className="follow" style={{ left: a.left, top: a.top, '--fx': a.fx, '--fy': a.fy }}>
+            <div className={`glow-orb ${a.cls}`} style={{ width: a.size, height: a.size, background: a.bg, filter: `blur(${a.blur}px)` }} />
+          </div>
+        ))}
+      </div>
+
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <div className="avail">
+            <span className="pulse" style={{ background: '#30d158', color: '#30d158' }} aria-hidden="true" />
+            <strong>Available December 2026</strong>
+            <span aria-hidden="true" style={{ color: '#48484a' }}>·</span>
+            <span>OPT, STEM extension eligible</span>
+          </div>
+
+          <TypeHeading
+            as="h1"
+            className="h1"
+            delay={300}
+            parts={[
+              { text: 'Software built to be ' },
+              { text: 'trusted.', className: 'grad-text', style: { backgroundImage: 'linear-gradient(90deg, #64d2ff 0%, #30d158 100%)' } },
+            ]}
+          />
+
+          <p className="hero-sub">Full-stack, iOS and applied-AI engineer. I learned in healthcare, where privacy, uptime and accuracy aren't optional, and I bring that standard to every product.</p>
+
+          <div className="hero-ctas">
+            <a className="ghost" href={LINKS.resume} target="_blank" rel="noopener noreferrer">View Resume</a>
+            <button type="button" className="link-btn" onClick={onAsk}>Ask Martha, my AI agent ›</button>
+          </div>
+
+          <a className="tv-chip" href={NEWS.tv.href} target="_blank" rel="noopener noreferrer">
+            <span className="tv-thumb">
+              <img src={NEWS.tv.thumb} alt="" />
+              <span className="center-overlay" style={{ background: 'rgba(0,0,0,.2)' }}><YouTubeLogo width={34} /></span>
+            </span>
+            <span className="stack-col">
+              <span className="kicker-sm" style={{ color: '#ff9f0a' }}>Featured on {NEWS.tv.outlet}</span>
+              <span style={{ fontSize: 15, fontWeight: 600 }}>{NEWS.tv.topic} interview</span>
+              <span style={{ fontSize: 13, color: 'var(--link)' }}>Watch on YouTube ›</span>
+            </span>
+          </a>
+        </div>
+
+        <div className="portrait-wrap">
+          <div aria-hidden="true" className="follow" style={{ inset: -28, borderRadius: 52, background: 'conic-gradient(from 210deg, #2997ff, #64d2ff, #30d158, #ff9f0a, #bf5af2, #2997ff)', filter: 'blur(40px)', opacity: 0.45, '--fx': '40px', '--fy': '30px' }} />
+          <img src={PORTRAIT} alt="Portrait of Tanmay Shelar" width="470" height="470" />
+        </div>
+      </div>
+    </section>
+  );
+}
