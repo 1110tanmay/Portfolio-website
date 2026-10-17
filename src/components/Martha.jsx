@@ -6,22 +6,26 @@ import { Icon } from './icons';
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
+// Walks MARTHA.models in order. Groq rate-limits per model, so a 429 (or a retired
+// model) on one falls through to the next instead of failing the reply.
 async function askGroq(system, history) {
-  const res = await fetch(GROQ_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROQ_API_KEY}` },
-    body: JSON.stringify({
-      model: MARTHA.model,
-      reasoning_effort: 'low',
-      messages: [{ role: 'system', content: system }, ...history],
-      max_tokens: 400,
-      temperature: 0.8,
-    }),
-  });
-  if (res.status === 429) return "I'm fielding a few conversations at once. Give me a moment and ask again, or reach Tanmay directly at tshelar@asu.edu.";
-  const data = await res.json().catch(() => ({}));
-  return data.choices?.[0]?.message?.content?.trim()
-    || "My apologies, I've hit a momentary lapse. Do try again, or email tshelar@asu.edu.";
+  const messages = [{ role: 'system', content: system }, ...history.slice(-MARTHA.historyLimit)];
+  let rateLimited = false;
+  for (const model of MARTHA.models) {
+    const res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROQ_API_KEY}` },
+      body: JSON.stringify({ model: model.id, ...model.params, messages, max_tokens: 400, temperature: 0.8 }),
+    });
+    if (res.status === 429) { rateLimited = true; continue; }
+    if (!res.ok) continue;
+    const data = await res.json().catch(() => ({}));
+    const text = data.choices?.[0]?.message?.content?.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+    if (text) return text;
+  }
+  return rateLimited
+    ? "I'm fielding a few conversations at once. Give me a minute and ask again, or reach Tanmay directly at tshelar@asu.edu."
+    : "My apologies, I've hit a momentary lapse. Do try again, or email tshelar@asu.edu.";
 }
 
 function Eyes({ happy }) {
@@ -72,7 +76,10 @@ export default function Martha({ open, onOpenChange, seed, onSeedUsed }) {
     logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, loading]);
 
-  const showSuggestions = messages.length === 1 && !loading;
+  // After every reply, offer three questions that haven't been asked yet.
+  const asked = new Set(messages.filter((m) => m.role === 'user').map((m) => m.content));
+  const nextSuggestions = MARTHA.suggestions.filter((s) => !asked.has(s)).slice(0, 3);
+  const showSuggestions = !loading && messages.at(-1)?.role === 'assistant' && nextSuggestions.length > 0;
 
   return (
     <>
@@ -94,7 +101,7 @@ export default function Martha({ open, onOpenChange, seed, onSeedUsed }) {
             {loading && <div className="bubble bot" aria-label="Martha is typing"><span className="typing"><span /><span /><span /></span></div>}
             {showSuggestions && (
               <div className="suggest">
-                {MARTHA.suggestions.map((s) => <button key={s} type="button" className="pill" onClick={() => send(s)}>{s}</button>)}
+                {nextSuggestions.map((s) => <button key={s} type="button" className="pill" onClick={() => send(s)}>{s}</button>)}
               </div>
             )}
           </div>
