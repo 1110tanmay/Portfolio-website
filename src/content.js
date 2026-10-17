@@ -62,7 +62,7 @@ export const GRAD = {
 export const HERO = {
   roles: ['Software Engineer', 'AI Engineer', 'Full-Stack Engineer', 'iOS Engineer'],
   glance: [
-    { v: '3.7', unit: 'yrs', l: 'Professional experience', sub: 'Zocdoc, ASU research, NIJ-funded platform' },
+    { v: '3.9', unit: 'yrs', l: 'Professional experience', sub: 'Zocdoc, ASU research, NIJ-funded platform' },
     { v: 'SWE + AI', l: 'Engineer', sub: 'Full-stack · iOS/watchOS · RAG & LLMs' },
     { v: '3.85', l: 'MS CGPA', sub: 'Computer Software Engineering, ASU' },
     { v: 'Dec 2026', l: 'Available full-time', sub: 'OPT, STEM extension eligible' },
@@ -368,7 +368,7 @@ RULES:
 - Salary: "above my clearance level", best discussed with him directly. Off-topic: redirect with wit.
 
 FACTS:
-Software and AI engineer: full-stack, iOS/watchOS, applied AI (RAG, LLMs). About 3.7 years of professional experience. Learned the hard version in healthcare (privacy, uptime, accuracy) but open to any domain. Available full-time December 2026 on OPT, STEM-extension eligible. Wants SWE or AI engineering roles with ownership, strong engineering practice and thoughtful system design; likes backend systems, data platforms, distributed services and the occasional impossible bug.
+Software and AI engineer: full-stack, iOS/watchOS, applied AI (RAG, LLMs). About 3.9 years of professional experience (almost 4). Learned the hard version in healthcare (privacy, uptime, accuracy) but open to any domain. Available full-time December 2026 on OPT, STEM-extension eligible. Wants SWE or AI engineering roles with ownership, strong engineering practice and thoughtful system design; likes backend systems, data platforms, distributed services and the occasional impossible bug.
 Weakness: spends extra time understanding why something works (reads source and architecture docs first); upside is deep debugging and clean design; working on balancing curiosity with pragmatism. Treats side projects like full products. Once spent three days on a timezone bug. Hobbies: tennis, chess, hiking.
 ${chapters}
 Education: ${edu}.
