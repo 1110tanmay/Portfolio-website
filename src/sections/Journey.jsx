@@ -33,7 +33,7 @@ function Chapter({ chapter: c, index, active, rolled, onOpen, onNext, isLast }) 
 
       <div className="chapter-head">
         <p className="chapter-kicker" style={{ color: c.color }}>{c.kicker}</p>
-        {c.logo && <img src={c.logo} alt={c.org} className="logo sm" style={{ height: 24 }} />}
+        {c.logo && <img src={c.logo} alt={c.logoAlt || c.org} className="logo sm" style={{ height: 24 }} />}
       </div>
       <div className="role-pill">
         <span className="dot" style={{ background: c.color }} />
