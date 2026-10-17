@@ -13,7 +13,7 @@ There is no test suite and no TypeScript. The `.venv/` directory is not used by 
 
 ## Architecture
 
-This is a single-page portfolio built with Vite and React 19 (plain JSX) in an Apple "Dark Pro" style: black background, glowing gradients, large type. The page is a story: Hero → Proof (bento of stats) → How I work → Journey (5 chapters) → Education → In the news → Contact. Clicking a tile or "Read the story" opens a story sheet with the details.
+This is a single-page portfolio built with Vite and React 19 (plain JSX) in an Apple "Dark Pro" style: black background, glowing gradients, large type. The page is a story: Hero → Proof (bento of stats) → How I work → Code reveal ("Code that ships.") → Journey (5 chapters) → Education → In the news → Contact. Clicking a tile or "Read the story" opens a story sheet with the details.
 
 - **`src/content.js` is the single source of truth** for copy, stats, links, images, story sheets (`SHEETS`), Journey chapters (`CHAPTERS`), Zocdoc `AWARDS`, `EDUCATION`, `NEWS` and the chatbot. `buildMarthaPrompt()` builds the chatbot's system prompt from the same data, so the bot can't contradict the page. Copy changes belong here, not in components. Facts must come from the resume or the user: never invent stats.
 - **`src/App.jsx`** composes the sections and owns the shared UI state: which story sheet is open (`sheetKey`, a key of `SHEETS`) and whether Martha's chat is open. Sections receive `onOpen(sheetKey)`.
@@ -30,6 +30,11 @@ This is a single-page portfolio built with Vite and React 19 (plain JSX) in an A
   - `useTick`: a slideshow timer, paused under reduced motion.
   - `useMouseVars`: writes the pointer position to the CSS vars `--mx` and `--my` on `<html>`. Elements with class `.follow` and `--fx`/`--fy` drift toward the cursor in pure CSS, with no React re-renders. Martha's eyes use the same vars.
 - **Styling** lives in `src/styles/global.css`: tokens on `:root`, component classes, a breakpoint at 1000px (tablet) and one at 600px (phone, single-column bento). Inline styles are used for per-item data such as gradients and glow colors.
+- **Scroll choreography**:
+  - Reveal: `useRevealOnScroll` in `App` reveals every `[data-reveal]` element on first entry, using the `reveal-up` keyframes with `fill-mode: backwards`, so elements' own hover transitions still work afterwards. The `--d` CSS var staggers elements, and `--ry` sets the rise distance.
+  - Overlap and depth: `.hero-depth` (the hero recedes while `.overlap`/Proof slides over it) and `.depth` (finished sections recede) are CSS scroll-driven animations inside `@supports (animation-timeline: view())`.
+  - `CodeReveal`: a 340vh section with a sticky stage. JS writes the scroll progress to `--p`, and CSS derives every phase from it. The live code shows only inside the letters through a black mask with white text and `mix-blend-mode: multiply`.
+  - All of it is disabled under reduced motion.
 - **Gotcha:** for gradient text, set `backgroundImage`, never the `background` shorthand. The shorthand resets `background-clip: text`, and numbers render as solid color blocks. `background-clip: text` also doesn't reach into transformed children, which is why each odometer strip clips its own gradient.
 - **Assets**: everything is under `src/assets/`, already optimized, and imported in `content.js`. Logos (`logos/asu.png`, `logos/zocdoc.png`) are official, recolored for dark backgrounds. The Smart Heat Tracker images and architecture diagram come from the SmartHeat-Tracker repo README. The Clinavis architecture diagram comes from that repo's `docs/architecture.svg`.
 

@@ -5,6 +5,7 @@ import { Footer, Nav } from './sections/Layout';
 import Hero from './sections/Hero';
 import { HowIWork, Proof } from './sections/Proof';
 import Journey from './sections/Journey';
+import CodeReveal from './sections/CodeReveal';
 import { Contact, Education, News } from './sections/Closing';
 import StorySheet from './components/StorySheet';
 import Martha from './components/Martha';
@@ -30,6 +31,7 @@ export default function App() {
         <Hero onAsk={() => setChatOpen(true)} />
         <Proof onOpen={setSheetKey} />
         <HowIWork />
+        <CodeReveal />
         <Journey onOpen={setSheetKey} />
         <Education />
         <News />

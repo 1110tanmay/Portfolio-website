@@ -461,3 +461,62 @@ textarea.field { height: auto; min-height: 120px; padding: 14px 16px; resize: ve
     }
   }
 }
+
+/* ── Code reveal: live coding scene → "Code that ships." → story lights up ──
+   --p (0..1) is the scroll progress through the section, written by CodeReveal.jsx.
+   0 → .38   the black mask fades in and the word scales down, so the live scene
+             ends up visible only inside the letters (white text + multiply blend)
+   .45 → .57 the word rises to make room
+   .48 → 1   the story fades in, then lights up phrase by phrase */
+.code-reveal {
+  --p: 0;
+  --a: clamp(0, var(--p) / 0.38, 1);
+  --up: clamp(0, (var(--p) - 0.45) / 0.12, 1);
+  --so: clamp(0, (var(--p) - 0.48) / 0.08, 1);
+  position: relative; height: 340vh;
+}
+.cr-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; isolation: isolate; display: flex; align-items: center; justify-content: center; }
+.cr-live {
+  position: absolute; inset: 0; overflow: hidden;
+  background: linear-gradient(120deg, #0071e3, #5e5ce6 25%, #bf5af2 45%, #ff375f 65%, #ff9f0a 85%, #ffd60a);
+  background-size: 260% 260%; animation: hue-pan 16s ease-in-out infinite alternate;
+}
+.cr-scroll { position: absolute; left: 5vw; right: 5vw; top: 0; animation: code-scroll 48s linear infinite; }
+.cr-code {
+  margin: 0; padding: 4vh 0; font-family: var(--mono); font-size: clamp(15px, 1.9vw, 27px); line-height: 1.55;
+  color: rgba(255, 255, 255, 0.6); white-space: pre-wrap; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.18);
+}
+.tok-k { color: #fff; font-weight: 700; }
+.tok-t { color: #ffe9a8; }
+.tok-f { color: #d6f5ff; }
+.tok-s { color: rgba(20, 20, 30, 0.72); }
+.tok-n { color: #fff; }
+.tok-c { color: rgba(255, 255, 255, 0.5); font-style: italic; }
+.tok-d { color: #ffd6e8; }
+.cr-mask {
+  position: absolute; inset: 0; background: #000; mix-blend-mode: multiply; opacity: var(--a);
+  display: flex; align-items: center; justify-content: center;
+}
+.cr-word {
+  margin: 0; color: #fff; text-align: center; white-space: nowrap;
+  font-size: clamp(64px, 13.5vw, 230px); font-weight: 800; line-height: 0.92; letter-spacing: -0.055em;
+  transform: translateY(calc(var(--up) * -17vh)) scale(calc(1 + (1 - var(--a)) * 1.7));
+  will-change: transform;
+}
+.cr-story {
+  position: absolute; left: 50%; bottom: 11vh; z-index: 2; width: min(980px, calc(100% - 40px)); margin: 0;
+  transform: translate(-50%, calc((1 - var(--so)) * 32px)); opacity: var(--so);
+  text-align: center; font-size: clamp(21px, 2.5vw, 36px); line-height: 1.32; font-weight: 600; letter-spacing: -0.02em; color: var(--text-2);
+}
+.cr-story > span { --lit: clamp(0, (var(--p) - 0.56 - var(--i) * 0.065) / 0.06, 1); opacity: calc(0.18 + 0.82 * var(--lit)); }
+.cr-story b { color: var(--text); font-weight: 700; }
+@keyframes hue-pan { from { background-position: 0% 30%; } to { background-position: 100% 70%; } }
+@keyframes code-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+
+/* Reduced motion: no scroll travel, show the finished composition. */
+.code-reveal.still { --p: 1; height: 100vh; }
+
+@media (max-width: 600px) {
+  .cr-word { white-space: normal; font-size: 19vw; }
+  .cr-story { bottom: 8vh; font-size: 19px; }
+}
