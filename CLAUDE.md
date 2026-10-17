@@ -41,6 +41,11 @@ This is a single-page portfolio built with Vite and React 19 (plain JSX) in an A
 - `gpt-oss` reasoning tokens count toward `max_tokens`. The prompt requires plain-text replies, because the chat bubble renders raw text and the model otherwise emits `**bold**`.
 - Meta's Muse Spark (Meta Model API, OpenAI-compatible) was considered but is paid-only, so it was not chosen.
 
+## Contact form (Web3Forms)
+
+- `Contact` in `sections/Closing.jsx` POSTs to Web3Forms using `FORM.accessKey` from `content.js`, and Web3Forms delivers to the user's inbox. The visitor's email becomes the reply-to. The access key is public by design. A hidden `botcheck` checkbox acts as a honeypot.
+- The free plan **rejects server-side requests** (curl or Node return 403, "Use our API in client side"). It also rejects headless Chrome's default `HeadlessChrome` user agent. To test, submit from a browser page, or from headless Chrome with a normal `--user-agent`. Every successful test sends a real email to the user, so keep tests rare and label them `[TEST]`.
+
 ## Deployment
 
 - The site is hosted on Vercel (tanmayshelar.vercel.app) through its GitHub integration with `origin` = `github.com/1110tanmay/Portfolio-website`. There is no Vercel CLI or `vercel.json`, so deploying means pushing to GitHub. Vercel serves `main` about 30 seconds after a push.

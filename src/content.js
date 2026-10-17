@@ -31,6 +31,13 @@ import awardExtraMiler from './assets/zocdoc/award-extra-miler.jpg';
 import awardMingChan from './assets/zocdoc/award-ming-chan.jpg';
 
 export const LOGOS = { asu: asuLogo, zocdoc: zocdocLogo };
+
+// Contact form → Web3Forms → Tanmay's inbox. The access key is public by design (it can
+// only deliver to his inbox). Free plan only accepts browser submissions, not server/curl.
+export const FORM = {
+  endpoint: 'https://api.web3forms.com/submit',
+  accessKey: '9bbc4db8-fcab-4219-8a1d-88fd764f0d29',
+};
 export const PORTRAIT = portrait;
 
 export const LINKS = {

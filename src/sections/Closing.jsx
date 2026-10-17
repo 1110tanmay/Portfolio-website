@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EDUCATION, LINKS, NEWS } from '../content';
+import { EDUCATION, FORM, LINKS, NEWS } from '../content';
 import { useInView } from '../hooks';
 import { Odometer, TypeHeading } from '../components/Motion';
 import { GitHubLogo, Icon, LinkedInLogo, MailLogo, YouTubeLogo } from '../components/icons';
@@ -93,14 +93,34 @@ const PROFILES = [
 
 export function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [sentTo, setSentTo] = useState('');
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  // No backend: compose the note in the visitor's mail app, pre-filled.
-  const submit = (e) => {
+  // Delivered by Web3Forms straight to Tanmay's inbox; "email" becomes the reply-to.
+  const submit = async (e) => {
     e.preventDefault();
-    const subject = `Portfolio: hello from ${form.name || 'a visitor'}`;
-    const body = `${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ''}`;
-    window.location.href = `mailto:${LINKS.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (e.currentTarget.botcheck.checked) return; // honeypot: only bots tick a hidden box
+    setStatus('sending');
+    try {
+      const res = await fetch(FORM.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: FORM.accessKey,
+          subject: `Portfolio: ${form.name} reached out`,
+          from_name: 'Tanmay Shelar portfolio',
+          ...form,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+      setSentTo(form.name.split(' ')[0]);
+      setForm({ name: '', email: '', message: '' });
+      setStatus('sent');
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -136,7 +156,7 @@ export function Contact() {
           </div>
           <div style={{ position: 'relative' }}>
             <h3 style={{ margin: '0 0 6px', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Send a note</h3>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--text-3)' }}>It opens in your email app, ready to send.</p>
+            <p style={{ margin: 0, fontSize: 15, color: 'var(--text-3)' }}>It lands straight in my inbox. I reply within a day.</p>
           </div>
           <label className="stack-col" style={{ position: 'relative', gap: 8 }}>
             <span className="field-label">Name</span>
@@ -144,13 +164,20 @@ export function Contact() {
           </label>
           <label className="stack-col" style={{ position: 'relative', gap: 8 }}>
             <span className="field-label">Work email</span>
-            <input className="field" name="email" type="email" autoComplete="email" placeholder="jane@company.com" value={form.email} onChange={set('email')} />
+            <input className="field" name="email" type="email" autoComplete="email" placeholder="jane@company.com" required value={form.email} onChange={set('email')} />
           </label>
           <label className="stack-col" style={{ position: 'relative', gap: 8 }}>
             <span className="field-label">Message</span>
             <textarea className="field" name="message" rows={4} placeholder="Tell me about the role or the problem you're solving." required value={form.message} onChange={set('message')} />
           </label>
-          <button type="submit" className="btn-light" style={{ position: 'relative' }}>Send message</button>
+          <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <button type="submit" className="btn-light" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send message'}</button>
+            <p role="status" aria-live="polite" style={{ margin: 0, fontSize: 15, color: status === 'error' ? '#ff6961' : '#30d158' }}>
+              {status === 'sent' && `Thanks, ${sentTo}. It's in my inbox; I'll reply within a day.`}
+              {status === 'error' && <>That didn't go through. Please email me at <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>.</>}
+            </p>
+          </div>
         </form>
       </div>
     </section>
