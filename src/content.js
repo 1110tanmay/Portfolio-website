@@ -58,6 +58,17 @@ export const GRAD = {
   white: 'linear-gradient(#f5f5f7, #f5f5f7)',
 };
 
+// ── Hero: the 5-second skim for recruiters ──
+export const HERO = {
+  roles: ['Software Engineer', 'AI Engineer', 'Full-Stack Engineer', 'iOS Engineer'],
+  glance: [
+    { v: '3.7', unit: 'yrs', l: 'Professional experience', sub: 'Zocdoc, ASU research, NIJ-funded platform' },
+    { v: 'SWE + AI', l: 'Engineer', sub: 'Full-stack · iOS/watchOS · RAG & LLMs' },
+    { v: '3.85', l: 'MS CGPA', sub: 'Computer Software Engineering, ASU' },
+    { v: 'Dec 2026', l: 'Available full-time', sub: 'OPT, STEM extension eligible' },
+  ],
+};
+
 export const NEWS = {
   tv: {
     href: LINKS.tv,

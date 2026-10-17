@@ -1,5 +1,6 @@
-import { LINKS, NEWS, PORTRAIT } from '../content';
-import { TypeHeading } from '../components/Motion';
+import { HERO, LINKS, NEWS, PORTRAIT } from '../content';
+import { useInView, useTick } from '../hooks';
+import { Odometer, TypeHeading } from '../components/Motion';
 import { YouTubeLogo } from '../components/icons';
 
 const AURAS = [
@@ -7,6 +8,50 @@ const AURAS = [
   { left: '2%', top: 240, size: 700, fx: '-140px', fy: '-110px', cls: 'drift-2', bg: 'radial-gradient(circle, rgba(191,90,242,.3) 0%, rgba(41,151,255,.16) 40%, transparent 70%)', blur: 50 },
   { left: '72%', top: 440, size: 460, fx: '90px', fy: '-140px', cls: 'drift', bg: 'radial-gradient(circle, rgba(255,159,10,.22) 0%, transparent 70%)', blur: 40 },
 ];
+
+const GLANCE_GRADS = [
+  'linear-gradient(135deg, #2997ff, #5ac8fa)',
+  'linear-gradient(135deg, #bf5af2, #ff375f)',
+  'linear-gradient(135deg, #ffd60a, #ff9f0a)',
+  'linear-gradient(135deg, #64d2ff, #30d158)',
+];
+
+// Cycles through job titles; the grid cell sizes itself to the longest one, so nothing jumps.
+function RoleRotator() {
+  const tick = useTick(2400);
+  const n = HERO.roles.length;
+  const current = tick % n;
+  return (
+    <p className="role-line">
+      <span>Tanmay Shelar</span>
+      <span className="sep" aria-hidden="true">/</span>
+      <span className="sr-only">{HERO.roles.join(', ')}</span>
+      <span className="rotator" aria-hidden="true">
+        {HERO.roles.map((r, i) => (
+          <span key={r} className={i === current ? 'on' : i === (current - 1 + n) % n ? 'prev' : ''}>{r}</span>
+        ))}
+      </span>
+    </p>
+  );
+}
+
+function Glance() {
+  const [ref, inView] = useInView({ threshold: 0.4 });
+  return (
+    <div ref={ref} className="glance" aria-label="At a glance">
+      {HERO.glance.map((g, i) => (
+        <div key={g.l}>
+          <span className="glance-v">
+            <Odometer value={g.v} gradient={GLANCE_GRADS[i]} active={inView} delay={i * 0.12} />
+            {g.unit && <small>{g.unit}</small>}
+          </span>
+          <span className="glance-l">{g.l}</span>
+          <span className="glance-sub">{g.sub}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Hero({ onAsk }) {
   return (
@@ -27,6 +72,8 @@ export default function Hero({ onAsk }) {
             <span aria-hidden="true" style={{ color: '#48484a' }}>·</span>
             <span>OPT, STEM extension eligible</span>
           </div>
+
+          <RoleRotator />
 
           <TypeHeading
             as="h1"
@@ -62,6 +109,10 @@ export default function Hero({ onAsk }) {
           <div aria-hidden="true" className="follow" style={{ inset: -28, borderRadius: 52, background: 'conic-gradient(from 210deg, #2997ff, #64d2ff, #30d158, #ff9f0a, #bf5af2, #2997ff)', filter: 'blur(40px)', opacity: 0.45, '--fx': '40px', '--fy': '30px' }} />
           <img src={PORTRAIT} alt="Portrait of Tanmay Shelar" width="470" height="470" />
         </div>
+      </div>
+
+      <div className="wrap" style={{ position: 'relative', paddingBottom: 110 }}>
+        <Glance />
       </div>
     </section>
   );

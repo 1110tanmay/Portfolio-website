@@ -97,7 +97,25 @@ a:hover { color: var(--link-hover); }
 
 /* ── Hero ── */
 .hero { position: relative; overflow: hidden; }
-.hero-grid { position: relative; padding-block: 150px 130px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 80px; align-items: center; }
+.hero-grid { position: relative; padding-block: 140px 72px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 80px; align-items: center; }
+/* Role rotator + at-a-glance bar: the 5-second recruiter skim */
+.role-line { margin: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.role-line .sep { color: var(--text-4); font-weight: 400; }
+.rotator { display: inline-grid; }
+.rotator > span {
+  grid-area: 1 / 1; white-space: nowrap; opacity: 0; transform: translateY(70%); filter: blur(6px);
+  background-image: linear-gradient(90deg, #2997ff, #bf5af2 55%, #ff375f); -webkit-background-clip: text; background-clip: text; color: transparent;
+  transition: opacity 0.6s ease, transform 0.7s var(--ease), filter 0.6s ease;
+}
+.rotator > span.on { opacity: 1; transform: none; filter: none; }
+.rotator > span.prev { transform: translateY(-70%); }
+.glance { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-radius: 28px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hairline); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); overflow: hidden; }
+.glance > div { padding: 26px 30px; display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--hairline); }
+.glance > div:first-child { border-left: 0; }
+.glance-v { display: flex; align-items: baseline; gap: 6px; font-size: 42px; font-weight: 700; letter-spacing: -0.035em; }
+.glance-v small { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-2); }
+.glance-l { font-size: 15px; font-weight: 600; }
+.glance-sub { font-size: 13px; line-height: 1.4; color: var(--text-3); }
 .hero-copy { display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
 .avail { display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px 8px 14px; border-radius: 980px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); font-size: 14px; color: var(--text-2); }
 .avail strong { color: var(--text); font-weight: 600; }
@@ -112,7 +130,7 @@ a:hover { color: var(--link-hover); }
 .stack-col { display: flex; flex-direction: column; gap: 3px; }
 .kicker-sm { font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
 .portrait-wrap { position: relative; display: flex; justify-content: center; }
-.portrait-wrap img { position: relative; width: 100%; max-width: 470px; aspect-ratio: 1; object-fit: cover; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.12); }
+.portrait-wrap img { position: relative; width: 100%; height: auto; max-width: 470px; aspect-ratio: 1; object-fit: cover; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.12); }
 
 /* ── Bento ── */
 .bento { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
@@ -358,7 +376,14 @@ textarea.field { height: auto; min-height: 120px; padding: 14px 16px; resize: ve
   .wrap { padding-inline: 20px; }
   .section { padding-block: 88px; }
   .nav-links { display: none; }
-  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; padding-block: 96px 64px; }
+  .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .portrait-wrap { order: -1; justify-content: flex-start; }
+  .portrait-wrap img { max-width: 168px; border-radius: 28px; }
+  .portrait-wrap .follow { inset: -14px !important; filter: blur(24px) !important; }
+  .glance > div:nth-child(odd) { border-left: 0; }
+  .glance > div:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+  .role-line { font-size: 22px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 48px 40px; }
   .h1 { font-size: 48px; }
   .h2 { font-size: 40px; }
   .journey-side .h2 { font-size: 40px; }
@@ -392,4 +417,8 @@ textarea.field { height: auto; min-height: 120px; padding: 14px 16px; resize: ve
   .stats3, .sheet-stats { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .device-stage, .device-stage.wide { gap: 20px; }
   .avail { flex-wrap: wrap; row-gap: 4px; }
+  .glance > div { padding: 18px 18px; }
+  .glance-v { font-size: 30px; }
+  .glance-v small { font-size: 16px; }
+  .role-line { font-size: 19px; }
 }
