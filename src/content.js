@@ -34,7 +34,7 @@ export const LOGOS = { asu: asuLogo, zocdoc: zocdocLogo };
 export const PORTRAIT = portrait;
 
 export const LINKS = {
-  resume: 'https://drive.google.com/file/d/1y4c1hrMdpDJZNquqUotH7eTkAGcaWmno/view?usp=drive_link',
+  resume: 'https://drive.google.com/file/d/1yT4LeqzM-_81ce0Q78SXABIWUPBL9c2X/view?usp=sharing',
   github: 'https://github.com/1110tanmay',
   linkedin: 'https://linkedin.com/in/tanmay-shelar/',
   email: 'tshelar@asu.edu',
